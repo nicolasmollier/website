@@ -1,0 +1,19 @@
+enable  : true
+item  :
+  - icon  : tf-ion-ios-checkmark-outline
+    title : Understand your Customers
+    description : >
+      The only way to make your business successful in the long run is by understanding your customers and their needs. We analyze your data and find out what your customers really want
+
+  - icon  : tf-ion-ios-speedometer-outline
+    title : Accelerate your Growth
+    description : >
+      With the proper knowledge and the right techniques we are able to extract insights from your Data on how to improve decisions and help you grow your business.
+
+  - icon  : tf-ion-ios-navigate-outline
+    title : Stay ahead of your Competition
+    description : >
+      We help you to unlock the potential in your Data. Companies that fail to make their decision process data-driven will fall behind while companies that realize the value of their data will pull ahead.
+
+
+
