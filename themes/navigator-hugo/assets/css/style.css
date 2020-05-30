@@ -1164,7 +1164,7 @@ a:focus, a:hover {
 
 .services .service-block i {
   font-size: 40px;
-  color: #f0326b;
+  color: #545d73;
   background: linear-gradient(100deg, #f9643d, #fe2a77);
   background-clip: text;
   -webkit-background-clip: text;
@@ -1233,7 +1233,7 @@ a:focus, a:hover {
 }
 
 .service-list .block {
-  background: #f0326b;
+  background: #545d73;
   color: #fff;
   padding: 30px;
 }
@@ -1257,7 +1257,7 @@ a:focus, a:hover {
 }
 .client-service-list li i{
   margin-right: 10px;
-  color: #f0326b;
+  color: #545d73;
 }
 
 /*=================================================================
