@@ -1,7 +1,7 @@
 baseURL = "https://example.org/"
 languageCode = "en-us"
 title = "Datalytics"
-theme = "navigator-hugo"
+#theme = "navigator-hugo"
 summaryLength = 10
 
 # Build robots.txt file
