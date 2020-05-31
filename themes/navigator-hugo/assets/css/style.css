@@ -7,8 +7,8 @@ body {
 
 p {
   font-family: "Titillium Web", sans-serif;
-  color: #9a9a9a;
-  font-size: 15px;
+  color: #616161;
+  font-size: 18px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -49,12 +49,12 @@ a, a:focus, a:hover {
 }
 
 a:focus, a:hover {
-  color: #f0326b;
+  color: #384b69;
 }
 
 .btn-main, .btn-main-sm {
-  background-color: #21D6BF;
-  background-image: linear-gradient(100deg, #f9643d, #fe2a77);
+  background-color: #102445;
+  background-image: linear-gradient(100deg, #64748c, #384b69);      /* Button Color */
   color: #fff;
   display: inline-block;
   font-size: 14px;
@@ -386,7 +386,7 @@ a:focus, a:hover {
 }
 
 .gradient, .title .border, .service-2 .service-item i {
-  background-image: linear-gradient(100deg, #f9643d, #fe2a77);
+  background-image: linear-gradient(100deg, #64748c, #384b69);  /* Hintergrund icons work process */
 }
 
 .header-bradcrumb {
@@ -400,7 +400,7 @@ a:focus, a:hover {
 }
 
 .header-bradcrumb a:hover {
-  color: #f0326b;
+  color: #384b69;
 }
 
 .slick-slide {
@@ -424,15 +424,15 @@ a:focus, a:hover {
 }
 
 .commonTab .nav-tabs .nav-item .nav-link.active {
-  border: 1px solid #f0326b;
-  background: #f0326b;
+  border: 1px solid #384b69;
+  background: #384b69;
   color: #fff;
 }
 
 .commonTab .nav-tabs .nav-item .nav-link:hover {
-  border: 1px solid #f0326b;
+  border: 1px solid #384b69;
   border-radius: 0;
-  background: #f0326b;
+  background: #384b69;
   color: #fff;
 }
 
@@ -463,7 +463,7 @@ a:focus, a:hover {
 }
 
 .single-page-header .breadcrumb li a {
-  color: #f0326b;
+  color: #7e90ab;
 }
 
 .navigation {
@@ -475,9 +475,9 @@ a:focus, a:hover {
   color: #fff;
 }
 
-.navigation .navbar-nav > li > a {
-  color: #707d8f;
-  font-size: 15px;
+.navigation .navbar-nav > li > a {                 /* Navigationsleiste oben */
+  color: #7d8896;
+  font-size: 18px;
   line-height: 26px;
   padding: 20px 15px !important;
   transition: .2s ease-in-out 0s;
@@ -497,7 +497,7 @@ a:focus, a:hover {
 
 .navigation .navbar-nav > li > a:hover, .navigation .navbar-nav > li > a:active, .navigation .navbar-nav > li > a:focus {
   background: none;
-  color: #f0326b;
+  color: #ffffff;
 }
 
 .navigation .navbar-toggler {
@@ -523,7 +523,7 @@ a:focus, a:hover {
 
 .navigation .dropdown .dropdown-item:hover {
   background: transparent;
-  color: #f0326b;
+  color: #384b69;
 }
 
 .navigation .dropdown .dropdown-menu {
@@ -597,8 +597,8 @@ a:focus, a:hover {
   margin-bottom: 20px;
 }
 
-.hero-area .block p {
-  color: #707d8f;
+.hero-area .block p {                        /* Schrift auf Startseite (erster Block) */
+  color: #7d8896;
   margin-bottom: 20px;
 }
 
@@ -647,7 +647,7 @@ a:focus, a:hover {
   transition: transform 300ms ease;
   transition: transform 300ms ease, -webkit-transform 300ms ease;
   background: #fff;
-  color: #f0326b;
+  color: #384b69;
   line-height: 80px;
   font-size: 30px;
   margin-left: 5px;
@@ -719,7 +719,7 @@ a:focus, a:hover {
 
 .about h4 {
   font-size: 14px;
-  color: #f0326b;
+  color: #384b69;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -758,9 +758,9 @@ a:focus, a:hover {
   display: inline-block;
   width: 12%;
   height: 3px;
-  background-color: #ffa535;
-  background-image: linear-gradient(100deg, #f9643d, #fe2a77);
-  background-image: linear-gradient(100deg, #f9643d, #fe2a77);
+  background-color: ##102445;
+  background-image: linear-gradient(100deg, #64748c, #384b69);
+  background-image: linear-gradient(100deg, #64748c, #384b69);                  /* Spiegelstrich */
 }
 
 @media (max-width: 768px) {
@@ -840,7 +840,7 @@ a:focus, a:hover {
 .contact-form input:hover,
 .contact-form textarea:hover,
 .contact-form #contact-submit:hover {
-  border-color: #f0326b;
+  border-color: #384b69;                       /* Contact Submit Button */
 }
 
 .contact-form #contact-submit {
@@ -848,7 +848,7 @@ a:focus, a:hover {
   padding: 15px 0;
   width: 100%;
   margin: 0;
-  background: #f0326b;
+  background: #384b69;
   color: #fff;
   border-radius: 0;
   cursor: pointer;
@@ -878,7 +878,7 @@ a:focus, a:hover {
   height: 30px;
   width: 30px;
   text-align: center;
-  color: #f0326b;
+  color: #384b69;
 }
 
 .social-icon li a i {
@@ -888,7 +888,7 @@ a:focus, a:hover {
   margin: 0;
 }
 
-.error {
+.error {                                         /* eventuell noch ändern */
   display: none;
   padding: 10px;
   color: #D8000C;
@@ -897,7 +897,7 @@ a:focus, a:hover {
   background-color: #FFBABA;
 }
 
-.success {
+.success {                                      /* eventuell noch ändern */
   background-color: #6cb670;
   border-radius: 4px;
   color: #fff;
@@ -969,7 +969,7 @@ a:focus, a:hover {
 .counters-item i {
   font-size: 40px;
   display: inline-block;
-  color: #f0326b;
+  color: #384b69;
 }
 
 .counters-item h3 {
@@ -1063,12 +1063,12 @@ a:focus, a:hover {
 }
 
 .portfolio-filter button:hover {
-  border-bottom: 2px solid #f0326b;
+  border-bottom: 2px solid #384b69;
   color: #000;
 }
 
 .portfolio-filter button.active {
-  border-bottom: 2px solid #f0326b;
+  border-bottom: 2px solid #384b69;
   color: #000;
 }
 
@@ -1135,7 +1135,7 @@ a:focus, a:hover {
 }
 
 .portfolio-block .caption .search-icon {
-  background: #f0326b;
+  background: #384b69;
   color: #fff;
   display: inline-block;
   padding: 4px 13px;
@@ -1165,14 +1165,14 @@ a:focus, a:hover {
 .services .service-block i {
   font-size: 40px;
   color: #545d73;
-  background: linear-gradient(100deg, #f9643d, #fe2a77);
+  background: linear-gradient(100deg, #64748c, #384b69);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .services .service-block h3 {
-  color: #333;
+  color: #424242;
   font-size: 18px;
 }
 
@@ -1233,7 +1233,7 @@ a:focus, a:hover {
 }
 
 .service-list .block {
-  background: #545d73;
+  background: #384b69;                                  /* Servise Section Hintergrundfarbe der Kacheln */
   color: #fff;
   padding: 30px;
 }
@@ -1280,7 +1280,7 @@ a:focus, a:hover {
 }
 
 .team-skills .progress-block .progress .progress-bar {
-  background: #f0326b;
+  background: #384b69;
   box-shadow: none;
 }
 
@@ -1289,7 +1289,7 @@ a:focus, a:hover {
 }
 
 /*=================================================================
-  Step section
+  Step section                                                                        /* Lesezeichen */
 ==================================================================*/
 .development-steps .step {
   padding: 80px 20px;
