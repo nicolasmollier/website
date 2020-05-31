@@ -1289,7 +1289,7 @@ a:focus, a:hover {
 }
 
 /*=================================================================
-  Step section                                                                        /* Lesezeichen */
+  Step section                                                                        
 ==================================================================*/
 .development-steps .step {
   padding: 80px 20px;
@@ -1325,7 +1325,7 @@ a:focus, a:hover {
 }
 
 .development-steps .step-2 {
-  background-color: #f0326b;
+  background-color: #384b69;
 }
 
 .development-steps .step-2 h4, .development-steps .step-2 p {
@@ -1401,8 +1401,8 @@ a:focus, a:hover {
 }
 
 .team-member .member-content ul li a i {
-  color: #f0326b;
-  background: linear-gradient(100deg, #f9643d, #fe2a77);
+  color: #384b69;
+  background: linear-gradient(100deg,  #64748c, #384b69);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1732,7 +1732,7 @@ a:focus, a:hover {
 }
 
 .top-footer li a:hover {
-  color: #f0326b;
+  color: #ffffff;
 }
 
 .footer-bottom {
@@ -1768,7 +1768,7 @@ a:focus, a:hover {
 }
 
 .footer-bottom a {
-  color: #f0326b;
+  color: #ffffff;
 }
 
 .subscribe-form .form-control {
