@@ -3,44 +3,44 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/de/categories/</loc>
+    <loc>/sites/infallible-jang-09ce2a/overview/de/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/"
+                href="/sites/infallible-jang-09ce2a/overview/en/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="de"
-                href="/de/categories/"
+                href="/sites/infallible-jang-09ce2a/overview/de/categories/"
                 />
   </url>
   
   <url>
-    <loc>/de/</loc>
+    <loc>/sites/infallible-jang-09ce2a/overview/de/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/"
+                href="/sites/infallible-jang-09ce2a/overview/en/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="de"
-                href="/de/"
+                href="/sites/infallible-jang-09ce2a/overview/de/"
                 />
   </url>
   
   <url>
-    <loc>/de/tags/</loc>
+    <loc>/sites/infallible-jang-09ce2a/overview/de/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/"
+                href="/sites/infallible-jang-09ce2a/overview/en/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="de"
-                href="/de/tags/"
+                href="/sites/infallible-jang-09ce2a/overview/de/tags/"
                 />
   </url>
   

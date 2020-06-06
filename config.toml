@@ -1,4 +1,4 @@
-baseURL = "https://example.org/"
+baseURL = "https://app.netlify.com/sites/infallible-jang-09ce2a/overview"
 languageCode = "en-us"
 title = "Datalytics"
 theme = "navigator-hugo"
