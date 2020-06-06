@@ -1732,7 +1732,7 @@ a:focus, a:hover {
 }
 
 .top-footer li a:hover {
-  color: #ffffff;
+  color: #ffffff  ;
 }
 
 .footer-bottom {

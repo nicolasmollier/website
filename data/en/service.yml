@@ -1,28 +1,34 @@
 enable    : true
-topTitle  : A LIST OF SERVICES
-title     : Our Service.
-subtitle  : Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum reiciendis quasi itaque, obcaecati atque sit!
+# topTitle  : A LIST OF SERVICES
+title     : Unser Service.
+subtitle  : Wir helfen Ihnen dabei, mithilfe von Daten bessere Entscheidungen zu treffen, Probleme effizient zu lösen und Ihre Kunden besser zu verstehen
 item      :
-  - icon  : tf-ion-ios-copy-outline
-    title : Branding
+  - icon  : tf-ion-ios-pie-outline
+    title : Analyse
     list  :
-      - name : Brand Strategy
-      - name : Advertising / Campaigns
-      - name : Product Design
-      - name : Video / Photography
+      - name : Social Media Analyse (Kundenmeinung)
+      - name : Warenkorb-Analysen 
+      - name : Kundensegmentierung
+      - name : Kundendatenanalyse
+      - name : Umfragen & statistische Auswertung
+      - name : Prozessanalysen 
 
-  - icon  : tf-ion-ios-alarm-outline
-    title : Branding
+  - icon  : tf-ion-ios-chatboxes-outline
+    title : Beratung
     list  :
-      - name : Web Design
-      - name : E- Commerce Site Design
-      - name : App Development
-      - name : Mobile UI Design
+      - name : Effiziente Nutzung von Daten
+      - name : Implementierung der Analyseergebnisse
+      - name : Ökonomische Implikation der Ergebnisse
+      - name : Kostensenkungspotenziale
+      - name : Imageoptimierung
+      - name : Datenoptimierte Marketingmaßnahmen
 
-  - icon  : tf-ion-ios-book-outline
-    title : IOS App Development
+  - icon  : tf-ion-ios-people-outline
+    title : Marketing
     list  :
-      - name : Game Development
-      - name : Game Design
+      - name : Zielgruppengenaue Werbemaßnahmen
+      - name : Modellierung von Kundenentscheidungen
       - name : Social Media Marketing
-      - name : Mobile UI Design
+      - name : Preisoptimierung
+      - name : Nutzerverhalten auf Ihrer Website
+      - name : Attributionsmodelle

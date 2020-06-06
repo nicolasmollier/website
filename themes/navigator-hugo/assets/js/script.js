@@ -17,7 +17,7 @@
 	/*	$('.play-icon i').click(function () {
 	/*		var video = '<iframe allowfullscreen src="' + $(this).attr('data-video') + '"></iframe>';
 	/*		$(this).replaceWith(video);
-	/*});
+	/*  });
 
 		/* ========================================================================= */
 		/*	Portfolio Filtering Hook
