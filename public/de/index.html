@@ -241,17 +241,17 @@
             
             <!-- Contact Form -->
             <div class="contact-form col-12 col-md-12 ">
-                <form subject="Datalytics" data-netlify="true" id="contact-form" action="POST" role="form">
+                <form subject="Datalytics" data-netlify="true" id="contact-form" action="POST" role="form" data-netlify-recaptcha="true">
                     <div class="form-group">
-                        <input type="text" placeholder="Name" class="form-control" name="name" id="name">
+                        <input type="text" placeholder="Name" class="form-control" name="Name" id="name">
                     </div>
 
                     <div class="form-group">
-                        <input type="Firma" placeholder="Firmenname" class="form-control" name="firm" id="firm">
+                        <input type="Firma" placeholder="Firmenname" class="form-control" name="Firma" id="firm">
                     </div>
 
                     <div class="form-group">
-                        <input type="email" placeholder="Ihre Email-Adresse" class="form-control" name="email" id="email">
+                        <input type="email" placeholder="Ihre Email-Adresse" class="form-control" name="Email" id="email">
                     </div>
 
                     <div class="form-group">
@@ -259,11 +259,11 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="text" placeholder="Betreff" class="form-control" name="subject" id="subject">
+                        <input type="text" placeholder="Betreff" class="form-control" name="subject" id="Betreff">
                     </div>
 
                     <div class="form-group">
-                        <textarea rows="6" placeholder="Nachricht" class="form-control" name="message" id="message"></textarea>
+                        <textarea rows="6" placeholder="Nachricht" class="form-control" name="Nachricht" id="message"></textarea>
                     </div>
  
                     
@@ -271,11 +271,18 @@
                     
 
                     <div id="cf-submit">
-                        <input type="submit" id="contact-submit" class="btn btn-primary" value="Senden">
+                        <input type="submit" id="contact-submit" class="button primary" value="Senden">
                     </div>
                 </form>
             </div>
         </div>
+
+
+<div data-netlify-recaptcha="true" >
+</div>
+
+
+
         <div class="row">
             <div class="col-12 col-md-4">
                 <div class="address-block contact-meta-block">
