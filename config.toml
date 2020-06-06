@@ -1,4 +1,4 @@
-baseURL = "https://app.netlify.com/sites/infallible-jang-09ce2a/overview"
+baseURL = "https://infallible-jang-09ce2a.netlify.app"
 languageCode = "en-us"
 title = "Datalytics"
 theme = "navigator-hugo"
