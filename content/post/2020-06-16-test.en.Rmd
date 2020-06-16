@@ -6,3 +6,15 @@ slug: test
 categories: []
 tags: []
 ---
+
+```{r include = F}
+library(tidyverse)
+```
+
+```{r}
+mtcars %>% 
+  ggplot(aes(as.factor(cyl), mpg)) +
+  geom_boxplot()
+```
+
+dsdadsedadsd
