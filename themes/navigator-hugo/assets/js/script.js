@@ -181,7 +181,7 @@
 				//and change the button text to Sending...
 				$('#contact-submit').attr({
 					'disabled': 'false',
-					'value': 'Sending...'
+					'value': 'Wird gesendet'
 				});
 
 				/* using the jquery's post(ajax) function and a lifesaver
@@ -198,7 +198,7 @@
 						//show the mail failed div
 						$('#mail-fail').fadeIn(500);
 						//re enable the submit button by removing attribute disabled and change the text back to Send The Message
-						$('#contact-submit').removeAttr('disabled').attr('value', 'Send The Message');
+						$('#contact-submit').removeAttr('disabled').attr('value', 'Danke für Ihre Nachricht');
 					}
 				});
 			}
