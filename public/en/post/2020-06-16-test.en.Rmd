@@ -1,0 +1,20 @@
+---
+title: test
+author: ''
+date: '2020-06-16'
+slug: test
+categories: []
+tags: []
+---
+
+```{r include = F}
+library(tidyverse)
+```
+
+```{r}
+mtcars %>% 
+  ggplot(aes(as.factor(cyl), mpg)) +
+  geom_boxplot()
+```
+
+dsdadsedadsd
