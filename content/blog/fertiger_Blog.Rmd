@@ -7,12 +7,31 @@ image: images/blog/Insurance.jpg
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.width = 5, fig.height = 3, fig.align = "center")
+knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(kableExtra)
 library(lubridate)
 library(jtools)
 library(modelr)
+library(forcats)
+
+BarPlot <- function(df, group, AV){
+  group <- df[group] %>% as_vector()
+  AV <- df[AV] %>% as_vector()
+  df <- df %>% mutate(group = group, AV = AV)
+  df %>% 
+    group_by(group) %>% 
+    summarize(AV = mean(AV)) %>% 
+    ggplot(aes(group, AV)) +
+    geom_bar(stat = "identity", width = 0.3)
+}
+
+Anova_Table <- function(aov, caption = "", position = "center"){
+  aov %>% 
+  anova() %>% 
+  knitr::kable(caption = caption) %>% 
+  kableExtra::kable_styling(position = position)
+}
 ```
 
 ## Die Daten
@@ -35,7 +54,11 @@ df <- df %>%
 df <- df %>% 
   mutate(LastContactMonth = str_to_title(LastContactMonth)) %>% 
   mutate(LastContactMonth = factor(LastContactMonth, levels = month.abb))
-
+df$HHInsurance <- df$HHInsurance %>% 
+  fct_recode(No = "0", Yes = "1") %>% 
+  fct_relevel("No", "Yes")
+df$CarLoan <- df$CarLoan %>% 
+  fct_recode(No = "0", Yes = "1")
 
 df_test <- read_csv("/home/nicolas/Documents/Data Science/R/Blogs/Blog_Linear_Regression/carInsurance_test.csv",
                     col_types = cols(Id = col_factor(),
@@ -66,10 +89,10 @@ df_test <- df_test %>%
 
 ```{r}
 df %>% 
-  head() %>%
+  head() %>% 
   kable() %>% 
   kable_styling(bootstrap_options = c("striped", "hover")) %>% 
-  scroll_box(width = "100%", height = "200px")
+  scroll_box(width = "100%", height = "300px")
 ```
 
 ## Fehlende Werte
@@ -84,7 +107,71 @@ df$Job <- fct_explicit_na(df$Job)
 df$Education <- fct_explicit_na(df$Education)
 df$Communication <- fct_explicit_na(df$Communication)
 df$Outcome <- fct_explicit_na(df$Outcome)
+```
 
+## Exploration
+
+
+
+```{r Graphical EDA, out.width="48%", fig.height=2, fig.width = 4}
+df %>% 
+  group_by(Marital) %>% 
+  summarize(CarInsurance = mean(CarInsurance)) %>% 
+  ggplot(aes(fct_reorder(Marital, CarInsurance, max), CarInsurance)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  labs(x = "", y = "Erfolgsquote", title = "Beziehungsstatus")
+
+df %>% 
+  group_by(Education) %>% 
+  summarize(CarInsurance = mean(CarInsurance)) %>% 
+  ggplot(aes(fct_reorder(Education, CarInsurance, max), CarInsurance)) +
+  geom_bar(stat = "identity", width = 0.65) +
+  labs(x = "", y = "Erfolgsquote", title = "Bildungsniveau")
+
+
+df %>% 
+  group_by(HHInsurance) %>% 
+  summarize(CarInsurance = mean(CarInsurance)) %>% 
+  ggplot(aes(HHInsurance, CarInsurance)) +
+  geom_bar(stat = "identity", width = 0.35) +
+  labs(x = "", y = "Erfolgsquote", title = "Haushaltsversicherung")
+
+
+df %>% 
+  group_by(CarLoan) %>% 
+  summarize(CarInsurance = mean(CarInsurance)) %>% 
+  ggplot(aes(CarLoan, CarInsurance)) +
+  geom_bar(stat = "identity", width = 0.35) +
+  labs(x = "", y = "Erfolgsquote", title = "Autokredit")
+
+
+
+
+
+```
+
+
+
+
+### Education
+
+
+
+
+```{r}
+aov_Education <- aov(CarInsurance ~ Education, data = df)
+
+
+aov_Marital <- aov(CarInsurance ~ Marital, data = df)
+aov_Marital %>% 
+  anova() %>% 
+  knitr::kable(caption = "ANOVA Marital") %>% 
+  kableExtra::kable_styling(position = "center")
+Anova_Table(aov_Marital, caption = "ANOVA Education")
+```
+
+
+```{r Exploration, out.width = "25%"}
 
 ```
 
