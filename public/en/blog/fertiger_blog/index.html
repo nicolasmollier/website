@@ -607,153 +607,25 @@ failure
 </tbody>
 </table>
 </div>
+<p>Der Datensatz wird in einen Trainingsdatensatz und einen Testdatensatz aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben <span class="citation">(Wickham and Grolemund 2016)</span>. Hier kommt der Testdatensatz ins Spiel. Da der Testdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden.</p>
 </div>
 <div id="exploration" class="section level2">
 <h2>Exploration</h2>
-<p>Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit 49.93% deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in 29.98% der Fälle. Kunden ohne Autokredit kauften zu 41.87% während Kunden mit Autokredit nur zu 28.57% eine Autoversicherung abschlossen.</p>
+<p>Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit 49.97% deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in 30.40% der Fälle. Kunden ohne Autokredit kauften zu 42.34% während Kunden mit Autokredit nur zu 28.21% eine Autoversicherung abschlossen.</p>
 <p><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-1.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-2.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-3.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-4.png" width="48%" /></p>
-<p>Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu beachten, dass die Verteilung dieser Variablen extrem schief ist. 98% der Kunden wurden nicht öfter als 10 mal kontaktiert. Betrachtet man diese 98% der Kunden, zeichnet sich ein Trend ab, demzufolge der Verkaufserfolg mit der Anzahl der Kontakte abnimmt. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu beachten, dass die Verteilung dieser Variablen extrem schief ist. 98% der Kunden wurden nicht öfter als 10 mal kontaktiert. Betrachtet man diese 98% der Kunden, zeichnet sich ein Trend ab, demzufolge der Verkaufserfolg mit der Anzahl der Kontakte abnimmt.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>Die Variable <em>PrevAttempts</em> gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen <em>NoOfContacts</em>. 99% der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.</p>
-<p><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-1.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-2.png" width="48%" /></p>
-<p><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA3-1.png" width="48%" style="display: block; margin: auto;" /></p>
-<div id="education" class="section level3">
-<h3>Education</h3>
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-1">Table 1: </span>ANOVA Marital
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-Df
-</th>
-<th style="text-align:right;">
-Sum Sq
-</th>
-<th style="text-align:right;">
-Mean Sq
-</th>
-<th style="text-align:right;">
-F value
-</th>
-<th style="text-align:right;">
-Pr(&gt;F)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Marital
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-8.724167
-</td>
-<td style="text-align:right;">
-4.3620837
-</td>
-<td style="text-align:right;">
-18.31295
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Residuals
-</td>
-<td style="text-align:right;">
-3997
-</td>
-<td style="text-align:right;">
-952.071833
-</td>
-<td style="text-align:right;">
-0.2381966
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-</tbody>
-</table>
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:unnamed-chunk-1">Table 1: </span>ANOVA Education
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-Df
-</th>
-<th style="text-align:right;">
-Sum Sq
-</th>
-<th style="text-align:right;">
-Mean Sq
-</th>
-<th style="text-align:right;">
-F value
-</th>
-<th style="text-align:right;">
-Pr(&gt;F)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Marital
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-8.724167
-</td>
-<td style="text-align:right;">
-4.3620837
-</td>
-<td style="text-align:right;">
-18.31295
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Residuals
-</td>
-<td style="text-align:right;">
-3997
-</td>
-<td style="text-align:right;">
-952.071833
-</td>
-<td style="text-align:right;">
-0.2381966
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-</tr>
-</tbody>
-</table>
+<p><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-1.png" width="33%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-2.png" width="33%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-3.png" width="33%" /></p>
+</div>
+<div id="modellierung" class="section level2">
+<h2>Modellierung</h2>
+</div>
+<div id="literaturverzeichnis" class="section level2 unnumbered">
+<h2>Literaturverzeichnis</h2>
+<div id="refs" class="references">
+<div id="ref-wickham2016r">
+<p>Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. &quot; O’Reilly Media, Inc.&quot;.</p>
+</div>
 </div>
 </div>
 <div class="footnotes">

@@ -3,6 +3,7 @@ title: "So verkauft man Versicherungen"
 author: "Nicolas Mollier"
 date: 2020-06-19
 image: images/blog/Insurance.jpg
+bibliography: log_Reg_Blog_Bibliography.bib
 
 ---
 
@@ -61,7 +62,8 @@ df$HHInsurance <- df$HHInsurance %>%
 df$CarLoan <- df$CarLoan %>% 
   fct_recode(No = "0", Yes = "1")
 
-df_test <- read_csv("/home/nicolas/Documents/Data Science/R/Blogs/Blog_Linear_Regression/carInsurance_test.csv",
+
+df_valid <- read_csv("/home/nicolas/Documents/Data Science/R/Blogs/Blog_Linear_Regression/carInsurance_test.csv",
                     col_types = cols(Id = col_factor(),
                                 Job = col_factor(),
                                 Marital = col_factor(),
@@ -71,10 +73,10 @@ df_test <- read_csv("/home/nicolas/Documents/Data Science/R/Blogs/Blog_Linear_Re
                                 CarLoan = col_factor(),
                                 Communication = col_factor(),
                                 Outcome = col_factor()))
-df_test <- df_test %>% 
+df_valid <- df_valid %>% 
   mutate(CallDuration = CallEnd - CallStart,
          CallHour = factor(hour(CallStart)))
-df_test <- df_test %>% 
+df_valid <- df_valid %>% 
   mutate(LastContactMonth = str_to_title(LastContactMonth)) %>% 
   mutate(LastContactMonth = factor(LastContactMonth, levels = month.abb))
 ```
@@ -99,30 +101,40 @@ df$Education <- fct_explicit_na(df$Education)
 df$Communication <- fct_explicit_na(df$Communication)
 df$Outcome <- fct_explicit_na(df$Outcome)
 ```
+```{r Train_Test_Split}
+set.seed(12345)
+trainIndex <- caret::createDataPartition(y = df$CarInsurance,
+                                         p = .75,
+                                         list = FALSE,
+                                         times = 1)
+df_train <- df[trainIndex, ]
+df_test <- df[-trainIndex, ]
+```
 
+Der Datensatz wird in einen Trainingsdatensatz und einen Testdatensatz aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben [@wickham2016r]. Hier kommt der Testdatensatz ins Spiel. Da der Testdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden.
 
 ## Exploration
 
 ```{r Mittelwertberechnungen, include = FALSE}
-HHInsurance_mean <- df %>% 
+HHInsurance_mean <- df_train %>% 
   group_by(HHInsurance) %>% 
   summarize(mean = mean(CarInsurance))
 
-CarLoan_mean <- df %>% 
+CarLoan_mean <- df_train %>% 
   group_by(CarLoan) %>% 
   summarize(mean = mean(CarInsurance))
 
-Anteil_NoOfContacts_kleiner_gleich_10 <- df %>% 
+Anteil_NoOfContacts_kleiner_gleich_10 <- df_train %>% 
   count(NoOfContacts) %>% 
-  mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df)) %>% 
+  mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df_train)) %>% 
   filter(NoOfContacts == 10) %>% 
   select(Anteil) %>% 
   as_vector() %>% 
   scales::percent() 
 
-Anteil_Prev_Attempts_kleiner_gleich_10 <- df %>% 
+Anteil_Prev_Attempts_kleiner_gleich_10 <- df_train %>% 
   count(PrevAttempts) %>% 
-  mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df)) %>% 
+  mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df_train)) %>% 
   filter(PrevAttempts == 10) %>% 
   select(Anteil) %>% 
   as_vector() %>% 
@@ -132,14 +144,14 @@ Anteil_Prev_Attempts_kleiner_gleich_10 <- df %>%
 Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "No", "mean"] %>% as_vector() %>% formattable::percent()` deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` der Fälle. Kunden ohne Autokredit kauften zu `r CarLoan_mean[CarLoan_mean$CarLoan == "No", "mean"] %>% as_vector() %>% formattable::percent()` während Kunden mit Autokredit nur zu `r CarLoan_mean[CarLoan_mean$CarLoan == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` eine Autoversicherung abschlossen.
 
 ```{r Graphical EDA1, out.width="48%", fig.height=2, fig.width = 4}
-df %>% 
+df_train %>% 
   group_by(Marital) %>% 
   summarize(CarInsurance = mean(CarInsurance)) %>% 
   ggplot(aes(fct_reorder(Marital, CarInsurance, max), CarInsurance)) +
   geom_bar(stat = "identity", width = 0.5) +
   labs(x = "", y = "Erfolgsquote", title = "Beziehungsstatus")
 
-df %>% 
+df_train %>% 
   group_by(Education) %>% 
   summarize(CarInsurance = mean(CarInsurance)) %>% 
   ggplot(aes(fct_reorder(Education, CarInsurance, max), CarInsurance)) +
@@ -147,7 +159,7 @@ df %>%
   labs(x = "", y = "Erfolgsquote", title = "Bildungsniveau")
 
 
-df %>% 
+df_train %>% 
   group_by(HHInsurance) %>% 
   summarize(CarInsurance = mean(CarInsurance)) %>% 
   ggplot(aes(HHInsurance, CarInsurance)) +
@@ -155,7 +167,7 @@ df %>%
   labs(x = "", y = "Erfolgsquote", title = "Haushaltsversicherung")
 
 
-df %>% 
+df_train %>% 
   group_by(CarLoan) %>% 
   summarize(CarInsurance = mean(CarInsurance)) %>% 
   ggplot(aes(CarLoan, CarInsurance)) +
@@ -170,52 +182,31 @@ Die Variable *PrevAttempts* gibt an, wie viele Kontaktversuche pro Kunde vor der
 
 
 
-```{r Graphical EDA2, out.width="48%", fig.height=2, fig.width = 4}
-df_NoOfContacts <- df %>% 
+```{r Graphical EDA2, out.width="33%", fig.height=3, fig.width = 3}
+df_NoOfContacts <- df_train %>% 
   filter(NoOfContacts <= 10) %>% 
   mutate(NoOfContacts = factor(NoOfContacts))
 BarPlot(df_NoOfContacts, "NoOfContacts", "CarInsurance", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "während Kampagne")
 
-df_PrevAttempts <- df %>% 
+df_PrevAttempts <- df_train %>% 
   filter(PrevAttempts <= 10) %>% 
   mutate(PrevAttempts = factor(PrevAttempts))
 BarPlot(df_PrevAttempts, "PrevAttempts", "CarInsurance", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "vor der Kampagne")
 
-```
-
-
-
-```{r Graphical EDA3, out.width="48%", fig.height=2, fig.width = 4, fig.align="center", warning = FALSE, errror = FALSE}
-df %>% 
+df_train %>% 
   mutate(CarInsurance = factor(CarInsurance)) %>% 
   mutate(CarInsurance = fct_recode(CarInsurance ,No = "0", Yes = "1")) %>% 
   ggplot(aes(CarInsurance, CallDuration)) +
   geom_boxplot() +
   coord_flip() +
-  labs(y = "Dauer des Gesprächs", x = "Kaufabschluss") +
+  labs(y = "Dauer des Gesprächs", x = "Kaufabschluss", title = "Gesprächsdauer") +
   scale_y_continuous()
-```
-
-
-### Education
-
-
-
-
-```{r}
-aov_Education <- aov(CarInsurance ~ Education, data = df)
-
-
-aov_Marital <- aov(CarInsurance ~ Marital, data = df)
-aov_Marital %>% 
-  anova() %>% 
-  knitr::kable(caption = "ANOVA Marital") %>% 
-  kableExtra::kable_styling(position = "center")
-Anova_Table(aov_Marital, caption = "ANOVA Education")
-```
-
-
-```{r Exploration, out.width = "25%"}
 
 ```
+
+    
+## Modellierung
+
+
+## Literaturverzeichnis
 
