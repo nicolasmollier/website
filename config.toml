@@ -161,7 +161,7 @@ mapLongitude= "8.668170"
 mapMarker   = "images/marker.png"
 
 # Call to Action Section on About Page
-[Site.params.cta]
+[Languages.en.params.cta]
 enable  = true
 bg      = "images/call-to-action/call-to-action-bg-2.jpg"
 title   = "Let's Create Something Together"

@@ -1,0 +1,95 @@
+---
+title: "So verkauft man Versicherungen"
+author: "Nicolas Mollier"
+date: "6/15/2020"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    fig_caption: true
+image: images/blog/Insurance.jpg
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width = 5, fig.height = 3, fig.align = "center")
+library(tidyverse)
+library(kableExtra)
+library(lubridate)
+library(jtools)
+library(modelr)
+```
+
+## Die Daten
+
+Der Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch noch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.
+```{r Datenimport, include = FALSE}
+df <- read_csv("carInsurance_train.csv", 
+               col_types = cols(Id = col_factor(),
+                                Job = col_factor(),
+                                Marital = col_factor(),
+                                Education = col_factor(),
+                                Default = col_factor(),
+                                HHInsurance = col_factor(),
+                                CarLoan = col_factor(),
+                                Communication = col_factor(),
+                                Outcome = col_factor()))
+df <- df %>% 
+  mutate(CallDuration = CallEnd - CallStart,
+         CallHour = factor(hour(CallStart)))
+df <- df %>% 
+  mutate(LastContactMonth = str_to_title(LastContactMonth)) %>% 
+  mutate(LastContactMonth = factor(LastContactMonth, levels = month.abb))
+
+
+df_test <- read_csv("/home/nicolas/Documents/Data Science/R/Blogs/Blog_Linear_Regression/carInsurance_test.csv",
+                    col_types = cols(Id = col_factor(),
+                                Job = col_factor(),
+                                Marital = col_factor(),
+                                Education = col_factor(),
+                                Default = col_factor(),
+                                HHInsurance = col_factor(),
+                                CarLoan = col_factor(),
+                                Communication = col_factor(),
+                                Outcome = col_factor()))
+df_test <- df_test %>% 
+  mutate(CallDuration = CallEnd - CallStart,
+         CallHour = factor(hour(CallStart)))
+df_test <- df_test %>% 
+  mutate(LastContactMonth = str_to_title(LastContactMonth)) %>% 
+  mutate(LastContactMonth = factor(LastContactMonth, levels = month.abb))
+```
+
+```{r Datentabelle, echo = FALSE}
+# df %>% 
+#   head() %>% 
+#   t() %>% 
+#   kable() %>% 
+#   kable_styling(bootstrap_options = c("striped", "bordered"), full_width = F) %>% 
+#   column_spec(1, bold = TRUE, border_right = TRUE)
+```
+
+```{r}
+df %>% 
+  head() %>%
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover")) %>% 
+  scroll_box(width = "100%", height = "200px")
+```
+
+## Fehlende Werte
+
+```{r Summary, include = FALSE}
+summary(df)
+```
+Vier der 21 Variablen enthalten fehlende Werte. Die Variablen, die fehlende Werte enthalten, sind alle qualitative Variablen, sodass das Problem fehlender Werte dadurch gelöst werden kann, jeweils eine neue Faktorstufe für die Fälle fehlender Werte zu kreieren.
+
+```{r Missings}
+df$Job <- fct_explicit_na(df$Job)
+df$Education <- fct_explicit_na(df$Education)
+df$Communication <- fct_explicit_na(df$Communication)
+df$Outcome <- fct_explicit_na(df$Outcome)
+
+
+```
+
