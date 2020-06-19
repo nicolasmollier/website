@@ -6,10 +6,19 @@
     <description>Recent content on Datalytics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Jul 2018 12:22:40 +0600</lastBuildDate>
+    <lastBuildDate>Fri, 19 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/en/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>So verkauft man Versicherungen</title>
+      <link>/en/blog/fertiger_blog/</link>
+      <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/en/blog/fertiger_blog/</guid>
+      <description>Die Daten Der Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch noch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können.</description>
+    </item>
     
     <item>
       <title>Blog Photos on Phone</title>
@@ -99,15 +108,6 @@
       
       <guid>/en/blog/2015-07-23-r-rmarkdown/</guid>
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents.</description>
-    </item>
-    
-    <item>
-      <title>So verkauft man Versicherungen</title>
-      <link>/en/blog/fertiger_blog/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/en/blog/fertiger_blog/</guid>
-      <description>Die Daten Der Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch noch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können.</description>
     </item>
     
     <item>
