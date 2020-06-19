@@ -15,7 +15,7 @@ library(jtools)
 library(modelr)
 library(forcats)
 
-BarPlot <- function(df, group, AV){
+BarPlot <- function(df, group, AV, ylab, xlab, title, subtitle){
   group <- df[group] %>% as_vector()
   AV <- df[AV] %>% as_vector()
   df <- df %>% mutate(group = group, AV = AV)
@@ -23,7 +23,8 @@ BarPlot <- function(df, group, AV){
     group_by(group) %>% 
     summarize(AV = mean(AV)) %>% 
     ggplot(aes(group, AV)) +
-    geom_bar(stat = "identity", width = 0.3)
+    geom_bar(stat = "identity", width = 0.6) +
+    labs(y = ylab, x = xlab, title = title, subtitle = subtitle)
 }
 
 Anova_Table <- function(aov, caption = "", position = "center"){
@@ -36,7 +37,7 @@ Anova_Table <- function(aov, caption = "", position = "center"){
 
 ## Die Daten
 
-Der Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch noch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.
+Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.
 ```{r Datenimport, include = FALSE}
 df <- read_csv("carInsurance_train.csv", 
                col_types = cols(Id = col_factor(),
@@ -78,16 +79,9 @@ df_test <- df_test %>%
   mutate(LastContactMonth = factor(LastContactMonth, levels = month.abb))
 ```
 
-```{r Datentabelle, echo = FALSE}
-# df %>% 
-#   head() %>% 
-#   t() %>% 
-#   kable() %>% 
-#   kable_styling(bootstrap_options = c("striped", "bordered"), full_width = F) %>% 
-#   column_spec(1, bold = TRUE, border_right = TRUE)
-```
 
-```{r}
+
+```{r Datentabelle}
 df %>% 
   head() %>% 
   kable() %>% 
@@ -95,12 +89,9 @@ df %>%
   scroll_box(width = "100%", height = "300px")
 ```
 
-## Fehlende Werte
-
 ```{r Summary, include = FALSE}
 summary(df)
 ```
-Vier der 21 Variablen enthalten fehlende Werte. Die Variablen, die fehlende Werte enthalten, sind alle qualitative Variablen, sodass das Problem fehlender Werte dadurch gelöst werden kann, jeweils eine neue Faktorstufe für die Fälle fehlender Werte zu kreieren.
 
 ```{r Missings}
 df$Job <- fct_explicit_na(df$Job)
@@ -109,11 +100,38 @@ df$Communication <- fct_explicit_na(df$Communication)
 df$Outcome <- fct_explicit_na(df$Outcome)
 ```
 
+
 ## Exploration
 
+```{r Mittelwertberechnungen, include = FALSE}
+HHInsurance_mean <- df %>% 
+  group_by(HHInsurance) %>% 
+  summarize(mean = mean(CarInsurance))
 
+CarLoan_mean <- df %>% 
+  group_by(CarLoan) %>% 
+  summarize(mean = mean(CarInsurance))
 
-```{r Graphical EDA, out.width="48%", fig.height=2, fig.width = 4}
+Anteil_NoOfContacts_kleiner_gleich_10 <- df %>% 
+  count(NoOfContacts) %>% 
+  mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df)) %>% 
+  filter(NoOfContacts == 10) %>% 
+  select(Anteil) %>% 
+  as_vector() %>% 
+  scales::percent() 
+
+Anteil_Prev_Attempts_kleiner_gleich_10 <- df %>% 
+  count(PrevAttempts) %>% 
+  mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df)) %>% 
+  filter(PrevAttempts == 10) %>% 
+  select(Anteil) %>% 
+  as_vector() %>% 
+  scales::percent() 
+```
+
+Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "No", "mean"] %>% as_vector() %>% formattable::percent()` deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` der Fälle. Kunden ohne Autokredit kauften zu `r CarLoan_mean[CarLoan_mean$CarLoan == "No", "mean"] %>% as_vector() %>% formattable::percent()` während Kunden mit Autokredit nur zu `r CarLoan_mean[CarLoan_mean$CarLoan == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` eine Autoversicherung abschlossen.
+
+```{r Graphical EDA1, out.width="48%", fig.height=2, fig.width = 4}
 df %>% 
   group_by(Marital) %>% 
   summarize(CarInsurance = mean(CarInsurance)) %>% 
@@ -144,13 +162,39 @@ df %>%
   geom_bar(stat = "identity", width = 0.35) +
   labs(x = "", y = "Erfolgsquote", title = "Autokredit")
 
+```
+
+Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu beachten, dass die Verteilung dieser Variablen extrem schief ist. `r Anteil_NoOfContacts_kleiner_gleich_10` der Kunden wurden nicht öfter als 10 mal kontaktiert. Betrachtet man diese `r Anteil_NoOfContacts_kleiner_gleich_10` der Kunden, zeichnet sich ein Trend ab, demzufolge der Verkaufserfolg mit der Anzahl der Kontakte abnimmt. ^[Kunden, die öfter als 10 mal kontaktiert wurden, werden bei dieser Betrachtug deshalb nicht berücksichtigt, da nur extrem wenige Kunden so oft kontaktiert wurden. Sie mit in die Betrachtung aufzunehmen würde dazu führen, dass sehr wenige Kunden pro Ausprägung der Variablen vorlägen und diese Kunden so übermäßig viel Einfluss auf die durchschnittliche Erfolgsquote je Kontaktanzahl hätten im Vergleich zu Kunden mit weniger Kontaktierungen.] 
+
+Die Variable *PrevAttempts* gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen *NoOfContacts*. `r Anteil_Prev_Attempts_kleiner_gleich_10` der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.
 
 
 
+```{r Graphical EDA2, out.width="48%", fig.height=2, fig.width = 4}
+df_NoOfContacts <- df %>% 
+  filter(NoOfContacts <= 10) %>% 
+  mutate(NoOfContacts = factor(NoOfContacts))
+BarPlot(df_NoOfContacts, "NoOfContacts", "CarInsurance", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "während Kampagne")
+
+df_PrevAttempts <- df %>% 
+  filter(PrevAttempts <= 10) %>% 
+  mutate(PrevAttempts = factor(PrevAttempts))
+BarPlot(df_PrevAttempts, "PrevAttempts", "CarInsurance", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "vor der Kampagne")
 
 ```
 
 
+
+```{r Graphical EDA3, out.width="48%", fig.height=2, fig.width = 4, fig.align="center", warning = FALSE, errror = FALSE}
+df %>% 
+  mutate(CarInsurance = factor(CarInsurance)) %>% 
+  mutate(CarInsurance = fct_recode(CarInsurance ,No = "0", Yes = "1")) %>% 
+  ggplot(aes(CarInsurance, CallDuration)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(y = "Dauer des Gesprächs", x = "Kaufabschluss") +
+  scale_y_continuous()
+```
 
 
 ### Education
