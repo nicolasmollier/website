@@ -15,6 +15,9 @@ library(lubridate)
 library(jtools)
 library(modelr)
 library(forcats)
+library(plotROC)
+library(pROC)
+library(captioner)
 
 BarPlot <- function(df, group, AV, ylab, xlab, title, subtitle){
   group <- df[group] %>% as_vector()
@@ -36,9 +39,11 @@ Anova_Table <- function(aov, caption = "", position = "center"){
 }
 ```
 
+
 ## Die Daten
 
-Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.
+
+
 ```{r Datenimport, include = FALSE}
 df <- read_csv("carInsurance_train.csv", 
                col_types = cols(Id = col_factor(),
@@ -62,31 +67,17 @@ df$HHInsurance <- df$HHInsurance %>%
 df$CarLoan <- df$CarLoan %>% 
   fct_recode(No = "0", Yes = "1")
 
-
-df_valid <- read_csv("/home/nicolas/Documents/Data Science/R/Blogs/Blog_Linear_Regression/carInsurance_test.csv",
-                    col_types = cols(Id = col_factor(),
-                                Job = col_factor(),
-                                Marital = col_factor(),
-                                Education = col_factor(),
-                                Default = col_factor(),
-                                HHInsurance = col_factor(),
-                                CarLoan = col_factor(),
-                                Communication = col_factor(),
-                                Outcome = col_factor()))
-df_valid <- df_valid %>% 
-  mutate(CallDuration = CallEnd - CallStart,
-         CallHour = factor(hour(CallStart)))
-df_valid <- df_valid %>% 
-  mutate(LastContactMonth = str_to_title(LastContactMonth)) %>% 
-  mutate(LastContactMonth = factor(LastContactMonth, levels = month.abb))
 ```
 
 
-
 ```{r Datentabelle}
+table_nums <- captioner::captioner(prefix = "Tabelle")
+tab.1_cap <- table_nums(name = "tab_1",
+                        caption = "Datensatz")
+
 df %>% 
   head() %>% 
-  kable() %>% 
+  kable(caption = tab.1_cap) %>% 
   kable_styling(bootstrap_options = c("striped", "hover")) %>% 
   scroll_box(width = "100%", height = "300px")
 ```
@@ -101,17 +92,37 @@ df$Education <- fct_explicit_na(df$Education)
 df$Communication <- fct_explicit_na(df$Communication)
 df$Outcome <- fct_explicit_na(df$Outcome)
 ```
+
 ```{r Train_Test_Split}
+train_anteil <- .5
+valid_anteil <- .25
+test_anteil <- .25
+
 set.seed(12345)
 trainIndex <- caret::createDataPartition(y = df$CarInsurance,
-                                         p = .75,
+                                         p = .5,
                                          list = FALSE,
                                          times = 1)
 df_train <- df[trainIndex, ]
-df_test <- df[-trainIndex, ]
+df_test_valid <- df[-trainIndex, ]
+
+valid_index <- caret::createDataPartition(y = df_test_valid$CarInsurance,
+                                          p = .5,
+                                          list = FALSE,
+                                          times = 1)
+df_valid <- df_test_valid[valid_index, ]
+df_test <- df_test_valid[-valid_index, ]
+
 ```
 
-Der Datensatz wird in einen Trainingsdatensatz und einen Testdatensatz aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben [@wickham2016r]. Hier kommt der Testdatensatz ins Spiel. Da der Testdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden.
+Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.  
+
+Der Datensatz wird in Trainingsdatensatz (`r formattable::percent(train_anteil)`), Validierungsdatensatz (`r formattable::percent(valid_anteil)`) und Testdatensatz (`r formattable::percent(test_anteil)`) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben [@wickham2016r]. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden. 
+
+
+
+
+
 
 ## Exploration
 
@@ -180,6 +191,9 @@ Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu be
 
 Die Variable *PrevAttempts* gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen *NoOfContacts*. `r Anteil_Prev_Attempts_kleiner_gleich_10` der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.
 
+Auch die Dauer des Gesprächs zeigt eine Korrleation mit Kaufentscheidung bezüglich der Autoversicherung. Gespräche, die zu einem Kaufabschluss führen, dauern deutlich länger als Gespräche, die nicht mit einem Kauf enden.
+
+
 
 
 ```{r Graphical EDA2, out.width="33%", fig.height=3, fig.width = 3}
@@ -199,7 +213,7 @@ df_train %>%
   ggplot(aes(CarInsurance, CallDuration)) +
   geom_boxplot() +
   coord_flip() +
-  labs(y = "Dauer des Gesprächs", x = "Kaufabschluss", title = "Gesprächsdauer") +
+  labs(y = "", x = "Kaufabschluss", title = "Dauer des Verkaufgesprächs", subtitle = "in Sekunden") +
   scale_y_continuous()
 
 ```
@@ -207,6 +221,86 @@ df_train %>%
     
 ## Modellierung
 
+```{r include = FALSE}
+
+tab.2_cap <- table_nums(name = "tab_2",
+                        caption = "Überprüfung der Hypothesen mithilfe der logistischer Regression")
+```
+
+
+Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:
+
+- Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
+- Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
+- Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
+- Kunden mit Autokredit kaufen seltener Autoversicherung
+- Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
+- Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
+- Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses
+
+Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fasst alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.
+
+```{r Model 1, include = FALSE}
+mod <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + NoOfContacts + PrevAttempts + CallDuration + Marital + CallDuration,
+           family = "binomial",
+           data = df_valid)
+summary_mod <- summary(mod)
+summary_mod$coefficients %>% 
+  knitr::kable(digits = 2) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+```{r Model 2, fig.align = "center"}
+mod_without_marital <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + NoOfContacts + PrevAttempts + CallDuration + CallDuration,
+                           family = "binomial",
+                           data = df_valid)
+summary_mod_without_marital <- summary(mod_without_marital)
+summary_mod_without_marital$coefficients %>% 
+  knitr::kable(digits = 2, caption = tab.2_cap) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+```{r include = FALSE}
+coefplot::coefplot(mod_without_marital, intercept = FALSE, innerCI = 2)
+confint(mod_without_marital)
+
+car::vif(mod_without_marital)
+anova(mod_without_marital, mod, test = "Chisq")
+```
+
+## Prognoseleistung
+
+
+
+```{r ConfusionMatrix und Prognoseleistung, warning=FALSE, message=FALSE}
+df_test <- df_test %>% 
+  add_predictions(mod_without_marital, type = "response") %>% 
+  mutate(pred_binary = ifelse(pred > 0.5, 1, 0))
+confusion_matrix <- caret::confusionMatrix(data = as_factor(df_test$pred_binary),
+                       reference = as_factor(df_test$CarInsurance),
+                       positive = "1")
+
+accuracy <- confusion_matrix$overall["Accuracy"]
+sensitivität <- confusion_matrix$byClass["Sensitivity"] 
+specificity <- confusion_matrix$byClass["Specificity"]
+area_under_curve <- auc(roc(data = df_test, response = CarInsurance, predictor = pred))
+
+```
+
+
+Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 50% beträgt. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von `r formattable::percent(accuracy)` vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu `r formattable::percent(sensitivität)` als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu `r formattable::percent(specificity)` korrekt vorhergesagt werden.
+Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Modells. Die AUC kann Werte zwischen 0 und 1 annehmen. In unserem Fall liefert das Modell eine AUC von `r formattable::percent(area_under_curve)`.
+
+
+```{r ROC, fig.align="center", fig.width = 4, fig.height=4}
+ggplot(data = df_test) +
+  geom_roc(aes(m = pred, d = CarInsurance)) +
+  labs(x = "1 - Spezifizität",
+       y = "Sensitivität",
+       title = "ROC Kurve")
+```
+
+
+## Ökonomische Bedeutung
 
 ## Literaturverzeichnis
 
