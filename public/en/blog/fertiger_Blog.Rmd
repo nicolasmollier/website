@@ -230,8 +230,8 @@ tab.2_cap <- table_nums(name = "tab_2",
 
 Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:
 
-- Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
-- Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
+* Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
+* Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
 - Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
 - Kunden mit Autokredit kaufen seltener Autoversicherung
 - Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
@@ -250,7 +250,7 @@ summary_mod$coefficients %>%
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
-```{r Model 2, fig.align = "center"}
+```{r , fig.align = "center"}
 mod_without_marital <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + NoOfContacts + PrevAttempts + CallDuration + CallDuration,
                            family = "binomial",
                            data = df_valid)
