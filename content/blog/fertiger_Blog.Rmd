@@ -232,7 +232,7 @@ Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsd
 
 * Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
 * Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
-- Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
+1. Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
 - Kunden mit Autokredit kaufen seltener Autoversicherung
 - Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
 - Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
