@@ -143,9 +143,11 @@
 
 <div id="die-daten" class="section level2">
 <h2>Die Daten</h2>
-<p>Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen <em>CallStart</em> und <em>CallEnd</em> zur Variablen <em>CallDuration</em> kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen <em>CallStart</em> die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable <em>Verkaufserfolg</em> zu erklären.</p>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:Datentabelle">Table 1: </span>Tabelle 1: Datensatz
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
@@ -607,18 +609,218 @@ failure
 </tbody>
 </table>
 </div>
-<p>Der Datensatz wird in einen Trainingsdatensatz und einen Testdatensatz aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben <span class="citation">(Wickham and Grolemund 2016)</span>. Hier kommt der Testdatensatz ins Spiel. Da der Testdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden.</p>
+<p>Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen <em>CallStart</em> und <em>CallEnd</em> zur Variablen <em>CallDuration</em> kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen <em>CallStart</em> die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable <em>Verkaufserfolg</em> zu erklären.</p>
+<p>Der Datensatz wird in Trainingsdatensatz (50.00%), Validierungsdatensatz (25.00%) und Testdatensatz (25.00%) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben <span class="citation">(Wickham and Grolemund 2016)</span>. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden.</p>
 </div>
 <div id="exploration" class="section level2">
 <h2>Exploration</h2>
-<p>Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit 49.97% deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in 30.40% der Fälle. Kunden ohne Autokredit kauften zu 42.34% während Kunden mit Autokredit nur zu 28.21% eine Autoversicherung abschlossen.</p>
+<p>Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit 49.62% deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in 30.42% der Fälle. Kunden ohne Autokredit kauften zu 42.08% während Kunden mit Autokredit nur zu 29.63% eine Autoversicherung abschlossen.</p>
 <p><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-1.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-2.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-3.png" width="48%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA1-4.png" width="48%" /></p>
 <p>Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu beachten, dass die Verteilung dieser Variablen extrem schief ist. 98% der Kunden wurden nicht öfter als 10 mal kontaktiert. Betrachtet man diese 98% der Kunden, zeichnet sich ein Trend ab, demzufolge der Verkaufserfolg mit der Anzahl der Kontakte abnimmt.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>Die Variable <em>PrevAttempts</em> gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen <em>NoOfContacts</em>. 99% der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.</p>
+<p>Auch die Dauer des Gesprächs zeigt eine Korrleation mit Kaufentscheidung bezüglich der Autoversicherung. Gespräche, die zu einem Kaufabschluss führen, dauern deutlich länger als Gespräche, die nicht mit einem Kauf enden.</p>
 <p><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-1.png" width="33%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-2.png" width="33%" /><img src="/blog/fertiger_Blog_files/figure-html/Graphical%20EDA2-3.png" width="33%" /></p>
 </div>
 <div id="modellierung" class="section level2">
 <h2>Modellierung</h2>
+<p>Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:</p>
+<ul>
+<li>Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird</li>
+<li>Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen</li>
+<li>Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung</li>
+<li>Kunden mit Autokredit kaufen seltener Autoversicherung</li>
+<li>Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne</li>
+<li>Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne</li>
+<li>Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses</li>
+</ul>
+<p>Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fasst alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.</p>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+(#tab:Model 2)Tabelle 2: Überprüfung der Hypothesen mithilfe der logistischer Regression
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Estimate
+</th>
+<th style="text-align:right;">
+Std. Error
+</th>
+<th style="text-align:right;">
+z value
+</th>
+<th style="text-align:right;">
+Pr(&gt;|z|)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+-0.95
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+-5.24
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educationprimary
+</td>
+<td style="text-align:right;">
+-0.80
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+<td style="text-align:right;">
+-3.06
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Educationsecondary
+</td>
+<td style="text-align:right;">
+-0.44
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+-2.51
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Education(Missing)
+</td>
+<td style="text-align:right;">
+-0.40
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+<td style="text-align:right;">
+-1.04
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HHInsuranceYes
+</td>
+<td style="text-align:right;">
+-1.24
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
+-7.47
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CarLoanYes
+</td>
+<td style="text-align:right;">
+-0.87
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+<td style="text-align:right;">
+-3.21
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NoOfContacts
+</td>
+<td style="text-align:right;">
+-0.08
+</td>
+<td style="text-align:right;">
+0.03
+</td>
+<td style="text-align:right;">
+-2.60
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PrevAttempts
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+5.62
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CallDuration
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+12.99
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="prognoseleistung" class="section level2">
+<h2>Prognoseleistung</h2>
+<p>Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 50% beträgt. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von 78.40% vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu 63.96% als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu 87.79% korrekt vorhergesagt werden.
+Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Modells. Die AUC kann Werte zwischen 0 und 1 annehmen. In unserem Fall liefert das Modell eine AUC von 86.00%.</p>
+<p><img src="/blog/fertiger_Blog_files/figure-html/ROC-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ökonomische-bedeutung" class="section level2">
+<h2>Ökonomische Bedeutung</h2>
 </div>
 <div id="literaturverzeichnis" class="section level2 unnumbered">
 <h2>Literaturverzeichnis</h2>
