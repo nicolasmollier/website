@@ -43,6 +43,7 @@ Anova_Table <- function(aov, caption = "", position = "center"){
 ## Die Daten
 
 
+Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.  
 
 ```{r Datenimport, include = FALSE}
 df <- read_csv("carInsurance_train.csv", 
@@ -66,18 +67,19 @@ df$HHInsurance <- df$HHInsurance %>%
   fct_relevel("No", "Yes")
 df$CarLoan <- df$CarLoan %>% 
   fct_recode(No = "0", Yes = "1")
-
+df <- df %>% 
+  mutate(Education = fct_relevel(Education, c("primary", "secondary", "tertiary", "(Missing)")))
 ```
 
 
 ```{r Datentabelle}
-table_nums <- captioner::captioner(prefix = "Tabelle")
-tab.1_cap <- table_nums(name = "tab_1",
-                        caption = "Datensatz")
+# table_nums <- captioner::captioner(prefix = "")
+# tab.1_cap <- table_nums(name = "tab_1",
+#                         caption = "Datensatz")
 
 df %>% 
   head() %>% 
-  kable(caption = tab.1_cap) %>% 
+  kable(caption = "Datensatz") %>% 
   kable_styling(bootstrap_options = c("striped", "hover")) %>% 
   scroll_box(width = "100%", height = "300px")
 ```
@@ -114,8 +116,7 @@ df_valid <- df_test_valid[valid_index, ]
 df_test <- df_test_valid[-valid_index, ]
 
 ```
-
-Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.  
+---
 
 Der Datensatz wird in Trainingsdatensatz (`r formattable::percent(train_anteil)`), Validierungsdatensatz (`r formattable::percent(valid_anteil)`) und Testdatensatz (`r formattable::percent(test_anteil)`) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben [@wickham2016r]. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden. 
 
@@ -223,22 +224,22 @@ df_train %>%
 
 ```{r include = FALSE}
 
-tab.2_cap <- table_nums(name = "tab_2",
-                        caption = "Überprüfung der Hypothesen mithilfe der logistischer Regression")
+# tab.2_cap <- table_nums(name = "tab_2",
+#                         caption = "Überprüfung der Hypothesen mithilfe der logistischer Regression")
 ```
 
 
 Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:
 
-* Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
-* Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
-1. Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
-- Kunden mit Autokredit kaufen seltener Autoversicherung
-- Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
-- Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
-- Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses
+>  1. Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
+>  2. Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
+>  3. Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
+>  4. Kunden mit Autokredit kaufen seltener Autoversicherung
+>  5. Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
+>  6. Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
+>  7. Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses
 
-Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fasst alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.
+Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.
 
 ```{r Model 1, include = FALSE}
 mod <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + NoOfContacts + PrevAttempts + CallDuration + Marital + CallDuration,
@@ -256,7 +257,7 @@ mod_without_marital <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + No
                            data = df_valid)
 summary_mod_without_marital <- summary(mod_without_marital)
 summary_mod_without_marital$coefficients %>% 
-  knitr::kable(digits = 2, caption = tab.2_cap) %>% 
+  knitr::kable(digits = 2, caption = "Überprüfung der Hypothesen mithilfe der logistischer Regression") %>% 
   kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 ```{r include = FALSE}
@@ -265,6 +266,10 @@ confint(mod_without_marital)
 
 car::vif(mod_without_marital)
 anova(mod_without_marital, mod, test = "Chisq")
+```
+
+```{r Kontrolle}
+
 ```
 
 ## Prognoseleistung
@@ -301,6 +306,25 @@ ggplot(data = df_test) +
 
 
 ## Ökonomische Bedeutung
+
+Die ökonomische Bedeutung der Ergebnisse kann in zwei Teile unterteilt werden. 
+
+Zunächst sind die Variablen der logistischen Regression danach zu unterscheiden, ob das Versicherungsunternehmen Einfluss auf deren Ausprägungen hat. Das Versicherungsunternehmen kann den Bildungsstand seiner Kunden nicht verändern. Genauso wenig kann beeinflusst werden, ob der potenzielle Kunde einen Autokredit hat oder nicht. Auf der anderen Seite kann das Unternehmen die Anzahl der Kontaktierungen vor und während der Kampagne beeinflussen. Ob eine Haushaltsversicherung vorliegt, stellt einen Spezialfall dar, auf den wir zum Schluss zu sprechen kommen. 
+
+Die Variablen *Bildungsstand* und *Autokredit* sind ökonomische bedeutsam, obwohl sie nicht durch das Unternehmen verändert werden können. Allerdings kann das Wissen um die Bedeutung der Variablen für die Erfolgsquote bei Versicherungsabschlüssen dazu genutzt werden, um gezielt potenzielle Kunden anzusprechen, die einen hohen Bildungsstand und keinen Autokredit haben, um so die Erfolgschancen zu erhöhen. Dieses gezielte Vorgehen erhöht die Effizienz der Werbemaßnahmen, da die Verschwendung von Unternehmensressourcen bei dem Versuch, Kunden mit geringer Kaufwahrscheinlichkeit zu werben, deutlich reduziert werden kann. Die Verkäufer der Versicherung können sich so gezielt auf die profitabelsten Kunden konzentrieren.
+
+Die Variablen *Anzahl der Kontaktierungen vor der Kampagne* und *Anzahl der Kontaktierungen nach der Kampagne* sind besonders interessant, da das Versicherungsunternehmen deren Ausprägung direkt beeinflussen kann. Um den Kampagnenerfolg zu steigern, kann das Unternehmen gemäß unserer Analyse bereits vor der Kampagne Maßnahmen ergreifen. Hartnäckigkeit scheint sich auszuzahlen. Da die Anzahl der Verkaufsversuche in der Vergangenheit einen positiven Effekt auf die Erfolgsquote in späteren Kampagnen hat, sollten auch Kunden, die in der Vergangenheit mehrfach nicht zum Abschluss einer Autoversicherung bewogen werden konnten, dennoch erneut kontaktiert werden. Allerdings muss dabei beachtet werden, dass sich der gewünschte Erfolg erst mit zeitlicher Verzögerung einstellt. Kurzfristig wirken sich zu häufige Kontaktversuche negativ auf die Kaufbereitschaft der Kunden aus. Möglicherweise muss die Vergütung der Verkäufer diesem Umstand auch Rechnung tragen. Es ist zu überlegen, ob nicht nur der Verkäufer der den Abschluss erreicht, eine Provision erhält, sondern auch derjenige, der mit seinen wiederholten Versuchen in der Vergangenheit, die Wahrscheinlichkeit für den finalen Vertragsabschluss erhöht hat.
+
+```{r Interpretation der Koeffizienten}
+exp(coef(mod_without_marital)) %>% 
+  knitr::kable(digits = 2, caption = "Einfluss der Variablen auf die Odds") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt(in unserem Fall: kein Abschluss der Versicherung).
+
+$$ Odds = \frac{P(Y = 1)}{P(Y = 0)}  $$
+
+Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). 
 
 ## Literaturverzeichnis
 
