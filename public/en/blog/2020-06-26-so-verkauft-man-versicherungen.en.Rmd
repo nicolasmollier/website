@@ -311,11 +311,11 @@ Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Mode
 
 Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt(in unserem Fall: kein Abschluss der Versicherung).
 
-$$ Odds = \frac{P(Y = 1)}{P(Y = 0)}  $$
+$$ Odds = \frac{P(Y = 1)}{P(Y = 0)} $$
 
 Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). 
 
-```{r Interpretation der Koeffizienten}
+```{r}
 exp(coef(mod_without_marital)) %>% 
   knitr::kable(digits = 2, caption = "Einfluss der Variablen auf die Odds") %>% 
   kable_styling(bootstrap_options = c("striped", "hover"))
