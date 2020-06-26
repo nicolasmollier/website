@@ -155,7 +155,7 @@ Anteil_Prev_Attempts_kleiner_gleich_10 <- df_train %>%
 
 Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "No", "mean"] %>% as_vector() %>% formattable::percent()` deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` der Fälle. Kunden ohne Autokredit kauften zu `r CarLoan_mean[CarLoan_mean$CarLoan == "No", "mean"] %>% as_vector() %>% formattable::percent()` während Kunden mit Autokredit nur zu `r CarLoan_mean[CarLoan_mean$CarLoan == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` eine Autoversicherung abschlossen.
 
-```{r Graphical EDA1, out.width="48%", fig.height=2, fig.width = 4}
+```{r Graphical EDA1, out.width="48%", fig.height=2, fig.width = 3.3}
 df_train %>% 
   group_by(Marital) %>% 
   summarize(CarInsurance = mean(CarInsurance)) %>% 
@@ -197,7 +197,7 @@ Auch die Dauer des Gesprächs zeigt eine Korrleation mit Kaufentscheidung bezüg
 
 
 
-```{r Graphical EDA2, out.width="33%", fig.height=3, fig.width = 3}
+```{r Graphical EDA2, out.width="33%", fig.height=2.8, fig.width = 3}
 df_NoOfContacts <- df_train %>% 
   filter(NoOfContacts <= 10) %>% 
   mutate(NoOfContacts = factor(NoOfContacts))
@@ -229,15 +229,22 @@ df_train %>%
 ```
 
 
-Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:
+Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:     
 
->  1. Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird
->  2. Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
->  3. Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
->  4. Kunden mit Autokredit kaufen seltener Autoversicherung
->  5. Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
->  6. Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
->  7. Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses        
+
+ > -- Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließt
+ 
+ > -- Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen
+ 
+ > -- Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung
+ 
+ > -- Kunden mit Autokredit kaufen seltener Autoversicherung
+ 
+ > -- Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
+ 
+ > -- Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
+ 
+ > -- Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses
 
 <!-- end of list -->
 

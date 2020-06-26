@@ -495,15 +495,25 @@ failure
 <h2>Modellierung</h2>
 <p>Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsdatensatzes gebildet:</p>
 <blockquote>
-<ol style="list-style-type: decimal">
-<li>Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließen wird</li>
-<li>Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen</li>
-<li>Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung</li>
-<li>Kunden mit Autokredit kaufen seltener Autoversicherung</li>
-<li>Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne</li>
-<li>Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne</li>
-<li>Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses</li>
-</ol>
+<p>– Je höher der Bildungsstand des Kunden, desto höher die Wahrscheinlichkeit, dass dieser eine Autoversicherung abschließt</p>
+</blockquote>
+<blockquote>
+<p>– Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen</p>
+</blockquote>
+<blockquote>
+<p>– Kunden mit Haushaltsversicherung kaufen seltener Autoversicherung</p>
+</blockquote>
+<blockquote>
+<p>– Kunden mit Autokredit kaufen seltener Autoversicherung</p>
+</blockquote>
+<blockquote>
+<p>– Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne</p>
+</blockquote>
+<blockquote>
+<p>– Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne</p>
+</blockquote>
+<blockquote>
+<p>– Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses</p>
 </blockquote>
 <!-- end of list -->
 <p>Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.</p>
