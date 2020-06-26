@@ -3,6 +3,7 @@ languageCode = "en-us"
 title = "Datalytics"
 theme = "navigator-hugo"
 summaryLength = 10
+math = true
 
 # Build robots.txt file
 enableRobotsTXT = true

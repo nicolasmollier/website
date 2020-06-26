@@ -13,10 +13,10 @@
     
     <item>
       <title>So verkauft man Versicherungen</title>
-      <link>/en/blog/fertiger_blog/</link>
+      <link>/en/blog/2020-06-26-so-verkauft-man-versicherungen/</link>
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/en/blog/fertiger_blog/</guid>
+      <guid>/en/blog/2020-06-26-so-verkauft-man-versicherungen/</guid>
       <description>Die Daten Der untersuchte Datensatz enthält zunächst 19 Variablen.</description>
     </item>
     
@@ -108,15 +108,6 @@
       
       <guid>/en/blog/2015-07-23-r-rmarkdown/</guid>
       <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents.</description>
-    </item>
-    
-    <item>
-      <title>Untitled</title>
-      <link>/en/blog/blog_logistic_regression/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/en/blog/blog_logistic_regression/</guid>
-      <description>Load Data  Inspect the Data  Exploration UV: CarInsurance  Figure 1: Proportions   AV Age  Wie man in Figure 2 sehen kann, ist die Erfolgsrate insbesondere bei sehr jungen und sehr alten Personen hoch.</description>
     </item>
     
   </channel>

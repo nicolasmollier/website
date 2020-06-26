@@ -4,7 +4,7 @@ author: "Nicolas Mollier"
 date: 2020-06-19
 image: images/blog/Insurance.jpg
 bibliography: log_Reg_Blog_Bibliography.bib
-
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -237,7 +237,9 @@ Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsd
 >  4. Kunden mit Autokredit kaufen seltener Autoversicherung
 >  5. Je öfter ein Kunde während der aktuellen Verkaufskampagne kontaktiert wird, desto seltener kauft er im Zuge der aktuellen Kampagne 
 >  6. Je öfter ein Kunde vor der aktuellen Verkaufskampagne bereits kontaktiert wurde, desto eher kauft er im Zuge der aktuellen Kampagne
->  7. Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses
+>  7. Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses        
+
+<!-- end of list -->
 
 Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.
 
@@ -279,7 +281,7 @@ anova(mod_without_marital, mod, test = "Chisq")
 ```{r ConfusionMatrix und Prognoseleistung, warning=FALSE, message=FALSE}
 df_test <- df_test %>% 
   add_predictions(mod_without_marital, type = "response") %>% 
-  mutate(pred_binary = ifelse(pred > 0.5, 1, 0))
+  mutate(pred_binary = ifelse(pred > 0.4, 1, 0))
 confusion_matrix <- caret::confusionMatrix(data = as_factor(df_test$pred_binary),
                        reference = as_factor(df_test$CarInsurance),
                        positive = "1")
@@ -292,20 +294,32 @@ area_under_curve <- auc(roc(data = df_test, response = CarInsurance, predictor =
 ```
 
 
-Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 50% beträgt. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von `r formattable::percent(accuracy)` vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu `r formattable::percent(sensitivität)` als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu `r formattable::percent(specificity)` korrekt vorhergesagt werden.
+Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 40% beträgt. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von `r formattable::percent(accuracy)` vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu `r formattable::percent(sensitivität)` als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu `r formattable::percent(specificity)` korrekt vorhergesagt werden.
 Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Modells. Die AUC kann Werte zwischen 0 und 1 annehmen. In unserem Fall liefert das Modell eine AUC von `r formattable::percent(area_under_curve)`.
 
 
 ```{r ROC, fig.align="center", fig.width = 4, fig.height=4}
-ggplot(data = df_test) +
-  geom_roc(aes(m = pred, d = CarInsurance)) +
-  labs(x = "1 - Spezifizität",
-       y = "Sensitivität",
-       title = "ROC Kurve")
+# ggplot(data = df_test) +
+#   geom_roc(aes(m = pred, d = CarInsurance)) +
+#   labs(x = "1 - Spezifizität",
+#        y = "Sensitivität",
+#        title = "ROC Kurve")
 ```
 
 
 ## Ökonomische Bedeutung
+
+Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt(in unserem Fall: kein Abschluss der Versicherung).
+
+$$ Odds = \frac{P(Y = 1)}{P(Y = 0)}  $$
+
+Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). 
+
+```{r Interpretation der Koeffizienten}
+exp(coef(mod_without_marital)) %>% 
+  knitr::kable(digits = 2, caption = "Einfluss der Variablen auf die Odds") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
 
 Die ökonomische Bedeutung der Ergebnisse kann in zwei Teile unterteilt werden. 
 
@@ -313,18 +327,26 @@ Zunächst sind die Variablen der logistischen Regression danach zu unterscheiden
 
 Die Variablen *Bildungsstand* und *Autokredit* sind ökonomische bedeutsam, obwohl sie nicht durch das Unternehmen verändert werden können. Allerdings kann das Wissen um die Bedeutung der Variablen für die Erfolgsquote bei Versicherungsabschlüssen dazu genutzt werden, um gezielt potenzielle Kunden anzusprechen, die einen hohen Bildungsstand und keinen Autokredit haben, um so die Erfolgschancen zu erhöhen. Dieses gezielte Vorgehen erhöht die Effizienz der Werbemaßnahmen, da die Verschwendung von Unternehmensressourcen bei dem Versuch, Kunden mit geringer Kaufwahrscheinlichkeit zu werben, deutlich reduziert werden kann. Die Verkäufer der Versicherung können sich so gezielt auf die profitabelsten Kunden konzentrieren.
 
+
+
 Die Variablen *Anzahl der Kontaktierungen vor der Kampagne* und *Anzahl der Kontaktierungen nach der Kampagne* sind besonders interessant, da das Versicherungsunternehmen deren Ausprägung direkt beeinflussen kann. Um den Kampagnenerfolg zu steigern, kann das Unternehmen gemäß unserer Analyse bereits vor der Kampagne Maßnahmen ergreifen. Hartnäckigkeit scheint sich auszuzahlen. Da die Anzahl der Verkaufsversuche in der Vergangenheit einen positiven Effekt auf die Erfolgsquote in späteren Kampagnen hat, sollten auch Kunden, die in der Vergangenheit mehrfach nicht zum Abschluss einer Autoversicherung bewogen werden konnten, dennoch erneut kontaktiert werden. Allerdings muss dabei beachtet werden, dass sich der gewünschte Erfolg erst mit zeitlicher Verzögerung einstellt. Kurzfristig wirken sich zu häufige Kontaktversuche negativ auf die Kaufbereitschaft der Kunden aus. Möglicherweise muss die Vergütung der Verkäufer diesem Umstand auch Rechnung tragen. Es ist zu überlegen, ob nicht nur der Verkäufer der den Abschluss erreicht, eine Provision erhält, sondern auch derjenige, der mit seinen wiederholten Versuchen in der Vergangenheit, die Wahrscheinlichkeit für den finalen Vertragsabschluss erhöht hat.
 
-```{r Interpretation der Koeffizienten}
-exp(coef(mod_without_marital)) %>% 
-  knitr::kable(digits = 2, caption = "Einfluss der Variablen auf die Odds") %>% 
-  kable_styling(bootstrap_options = c("striped", "hover"))
+
+```{r gezielte Kundenansprache}
+mean_CarInsurance_test <- mean(df_test$CarInsurance)
+pos_pred_value <- confusion_matrix$byClass["Pos Pred Value"]
+anzahl_kontaktierungen <- sum(df_test$pred_binary)
 ```
-Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt(in unserem Fall: kein Abschluss der Versicherung).
 
-$$ Odds = \frac{P(Y = 1)}{P(Y = 0)}  $$
+Es ist kostspielig für Versicherungsunternehmen, Versicherungen zu verkaufen. Es müssen Verkaufsmaterialien produziert, Marketingmaßnahmen müssen geplant und umgesetzt und Personal für den Verkauf muss bezahlt werden. Aus diesem Grund ist es wichtig, dass gezielt diejenigen potenziellen Kunden angesprochen werden, die eine hohe Kaufwahrscheinlichkeit aufweisen. In unserem Testdatensatz war die Versicherung mit dem Versuch, Autoversicherungen zu verkaufen bei `r mean_CarInsurance_test %>% formattable::percent()` der umworbenen Kunden erfolgreich. In `r 1 - mean_CarInsurance_test %>% formattable::percent()` der Fälle war der Verkaufsversuch vergeblich und die Kosten für Personal, Material und Marketing vergeudet. Hätte die Versicherung ihre Kampagne stattdessen auf unserem Modell aufgebaut, wären viele der vergeblichen Werbeversuche vermieden worden. Unser Modell war in der Lage zu `r formattable::percent(specificity)` Personen, die im Verlauf der Kampagne ohnehin nicht kaufen würden, korrekt zu erkennen. Die Kosten, die durch die Werbeversuche bei diesen Personen entstanden sind, hätten vermieden werden können. Das wahrlose Kontaktieren von Personen hätte im Fall des Testdatensatzes eine Erfolgsquote von `r mean_CarInsurance_test` erzielt. Das gezielte Kontaktieren von den Kunden mit hoher Kaufwahrscheinlichkeit gemäß unserem Modell hätte hingegen dazu geführt, dass `r formattable::percent(pos_pred_value)` der kontaktierten Kunden gekauft hätten. Auf der anderen Seite ist aber wichtig, nicht nur Werbeversuche bei Kunden mit geringer Kaufwahrscheinlichkeit zu vermeiden, sondern auch möglichst viele der kaufbereiten Kunden zu identifizieren und zu kontaktieren. Klassifiziert man alle Kunden als Käufer, die eine Kaufwahrscheinlichkeit gemäß unserer Modellprognose von mehr als 40% aufweisen, so ist unser Modell in der Lage, `r formattable::percent(sensitivität)` der Kunden, die letzendlich kauften, im Voraus korrekt zu identifizieren. Somit kann durch eine Werbekampagne auf Basis unseres Modells der Anteil der Misserfolge von `r 1 - mean_CarInsurance_test %>% formattable::percent()` auf `r 1 - formattable::percent(pos_pred_value)` reduziert, die Zahl der notwendigen Kontaktierungen von `r 1000` auf `r anzahl_kontaktierungen` verringert und `r formattable::percent(sensitivität)` der tatsächlich Kaufbereiten von unserer Kampagne erreicht werden. 
 
-Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). 
+
+
+## Fazit
+
+Unsere Analyse liefert Erkenntnisse, die in zwei Kategorien zu unterteilen sind. 
+Zunächst identifiziert unsere Analyse Variablen, die einen statistisch signifikanten Einfluss auf die zu erklärende Variable (Kauf der Autoversicherung) haben. Variablen, auf die das Versicherung direkt Einfluss nehmen kann, können so verändert werden, dass die Kaufwahrscheinlichkeit erhöht wird. Andere Einflussfaktoren, auf die das Unternehmen keinen direkten Einfluss hat, können dazu genutzt werden, um gezielt nach potenziellen Kunden Ausschau zu halten, die Eigenschaften aufweisen, die hohe Kaufbereitschaft erwarten lassen. 
+Erkenntnisse der zweiten Kategorie beziehen sich auf die Prognoseleistung des Modells. Mithilfe des Modells können wir potenzielle Kunden gemäß ihrer prognostizierten Kaufwahrscheinlichkeit in Käufer und Nicht-Käufer aufteilen. Indem wir anschließend ausschließlich die als Käufer klassifizierten Personen kontaktieren, reduzieren wir die Kosten der Werbekampagne und erhöhen die Erolgsquote der Kampagne von `r  formattable::percent(mean_CarInsurance_test)` auf `r formattable::percent(pos_pred_value)`.
 
 ## Literaturverzeichnis
 
