@@ -108,14 +108,14 @@ languageCode = "en-us"
 title = "Datalytics"
 dateFormat = "January 2, 2006"
 
-home = "Home"
+home = "Start"
 logo = "images/logo.png"
 menufixed = false
 
-footerDescription = "Integer posuere erat a ante venenati dapibus posuere velit aliquet. Fusce dapibus, tellus cursus commodo, tortor mauris sed posuere."
-footerServiceTitle = "Service"
+footerDescription = "Wir sind ein datengetriebenes Beratungsunternehmen. Daten sind unsere Leidenschaft und das Werkzeug für die Lösung wirtschaftlicher Probleme."
+footerServiceTitle = "Leistungsspektrum"
 footerQuicklinkTitle = "Quicklinks"
-footerAboutTitle = "About"
+footerAboutTitle = "Wer wir sind"
 footerSubscribeTitle = "Subscribe"
 
 # Hero Area Section
@@ -132,22 +132,22 @@ videoThumb = "images/slider/video-player-thumb.jpg"
 # About 2 Section
 [Languages.en.params.aboutSm]
 enable  = true
-title   = "We have explored the digital landscape with passion for a long time"
-description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae deleniti ipsa labore necessitatibus culpa veritatis quo accusantium, neque enim ea ad eaque iure, quas tempore velit, quibusdam dolor illo! Explicabo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid quisquam maiores iste soluta, nihil dolorem?"
+title   = "Mit unserer Leidenschaft für datengetriebene Businesslösungen helfen wir Ihnen dabei, Gewinn aus Ihren Daten zu ziehen"
+description = "Verlassen Sie sich bei wichtigen Betriebsentscheidungen nicht auf Faustformeln und bloßes Bauchgefühl. Schöpfen Sie das Potenzial aus, das in Daten steckt. Wir helfen Ihnen dabei, die Effizienz Ihres Unternehmens zu steigern, indem wir Daten generieren, analysieren und basierend auf den erzeugten Erkenntnissen klare Handlungsempfehlungen  ableiten. "
 
 # Blog Section On Homepage
 [Languages.en.params.blog]
 enable  = true
-topTitle= "OUR UNTOLD STORY"
-title   = "Blog."
-subtitle= "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum reiciendis quasi itaque, obcaecati atque sit!"
+topTitle= ""
+title   = "Analysen"
+subtitle= "Hier finden Sie eine Auswahl durchgeführter Analysen"
 
 # Contact Section
 [Languages.en.params.contact]
 enable  = true
 #topTitle= "DROP US A NOTE"
-title   = "Contact Us."
-subtitle= "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum reiciendis quasi itaque, obcaecati atque sit!"
+title   = "Kontaktformular"
+subtitle= "Schicken Sie uns eine Anfrage über unser Kontaktformular. Wir melden uns umgehend bei Ihnen."
 address = "Schulstraße 6 <br> 65618 Selters-Haintchen , Deutschland"
 phone   = "(49) 157 50288464"
 email = "nicolas.mollier@gmx.de"
@@ -168,7 +168,7 @@ bg      = "images/call-to-action/call-to-action-bg-2.jpg"
 title   = "Let's Create Something Together"
 subtitle= "Proin gravida nibh vel velit auctor aliquet. Aenean sollicudin bibendum auctor, <br> nisi elit consequat ipsum, nesagittis sem nid elit. Duis sed odio sitain elit."
 btnText = "Contact Us"
-name = "Contact Us"
+name = "contact"
 url = "contact"
 
 
@@ -201,32 +201,32 @@ weight  = 6
 
 # Footer Service Menu
 [[menu.service]]
-name    = "graphicdesign"
+name    = "Analyse"
 url     = "service"
 weight  = 1
 [[menu.service]]
-name    = "webdesign"
+name    = "Beratung"
 url     = "service"
 weight  = 2
 [[menu.service]]
-name    = "webdevelopment"
+name    = "Marketing"
 url     = "service"
 weight  = 3
 
 # Footer Quick links Menu
 [[menu.quicklink]]
-name    = "partners"
+name    = "about"
 url     = "about"
 weight  = 1
 [[menu.quicklink]]
-name    = "about"
-url     = "about"
+name    = "service"
+url     = "service"
 weight  = 2
 [[menu.quicklink]]
-name    = "faqs"
-url     = "about"
+name    = "portfolio"
+url     = "portfolio"
 weight  = 3
 [[menu.quicklink]]
-name    = "badges"
-url     = "about"
+name    = "blog"
+url     = "blog"
 weight  = 4

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Datalytics | Blog on Datalytics</title>
+    <title>Datalytics | Analysen on Datalytics</title>
     <link>/en/blog/</link>
-    <description>Recent content in Datalytics | Blog on Datalytics</description>
+    <description>Recent content in Datalytics | Analysen on Datalytics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 07 Jul 2018 18:23:33 +0600</lastBuildDate>
@@ -17,7 +17,7 @@
       <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/en/blog/2020-06-26-so-verkauft-man-versicherungen/</guid>
-      <description>Die Daten Der untersuchte Datensatz enthält zunächst 19 Variablen.</description>
+      <description>Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden.</description>
     </item>
     
     <item>

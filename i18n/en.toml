@@ -1,20 +1,20 @@
 [about]
-other = "About"
+other = "Wer wir sind"
 [service]
-other = "Service"
+other = "Leistungsspektrum"
 [portfolio]
-other = "Portfolio"
+other = "Arbeitsprozess"
 [blog]
-other = "Blog"
+other = "Analysen"
 [contact]
-other = "Contact"
+other = "Kontakt"
 
 [graphicdesign]
-other = "Graphic Design"
+other = "Analyse"
 [webdesign]
-other = "Web Design"
+other = "Beratung"
 [webdevelopment]
-other = "Web Development"
+other = "Marketing"
 
 [partners]
 other = "Partners"

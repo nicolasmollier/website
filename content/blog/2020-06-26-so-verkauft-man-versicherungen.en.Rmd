@@ -39,6 +39,7 @@ Anova_Table <- function(aov, caption = "", position = "center"){
 }
 ```
 
+Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden. Anhand der Analyse eines Datensatzes, der 4000 Versicherungskunden umfasst, zeigen wir, wie der Verkaufsprozess zielgerichteter und effizienter gestaltet werden kann. Die Umsetzung der Erkenntnisse unserer Analyse kann Bares Geld sparen.
 
 ## Die Daten
 
@@ -301,7 +302,7 @@ area_under_curve <- auc(roc(data = df_test, response = CarInsurance, predictor =
 ```
 
 
-Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 40% beträgt. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von `r formattable::percent(accuracy)` vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu `r formattable::percent(sensitivität)` als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu `r formattable::percent(specificity)` korrekt vorhergesagt werden.
+Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 40% ist. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von `r formattable::percent(accuracy)` vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu `r formattable::percent(sensitivität)` als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu `r formattable::percent(specificity)` korrekt vorhergesagt werden.
 Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Modells. Die AUC kann Werte zwischen 0 und 1 annehmen. In unserem Fall liefert das Modell eine AUC von `r formattable::percent(area_under_curve)`.
 
 
@@ -316,7 +317,7 @@ Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Mode
 
 ## Ökonomische Bedeutung
 
-Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt(in unserem Fall: kein Abschluss der Versicherung).
+Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt (in unserem Fall: kein Abschluss der Versicherung).
 
 $$ Odds = \frac{P(Y = 1)}{P(Y = 0)} $$
 
@@ -352,7 +353,7 @@ Es ist kostspielig für Versicherungsunternehmen, Versicherungen zu verkaufen. E
 ## Fazit
 
 Unsere Analyse liefert Erkenntnisse, die in zwei Kategorien zu unterteilen sind. 
-Zunächst identifiziert unsere Analyse Variablen, die einen statistisch signifikanten Einfluss auf die zu erklärende Variable (Kauf der Autoversicherung) haben. Variablen, auf die das Versicherung direkt Einfluss nehmen kann, können so verändert werden, dass die Kaufwahrscheinlichkeit erhöht wird. Andere Einflussfaktoren, auf die das Unternehmen keinen direkten Einfluss hat, können dazu genutzt werden, um gezielt nach potenziellen Kunden Ausschau zu halten, die Eigenschaften aufweisen, die hohe Kaufbereitschaft erwarten lassen. 
+Zunächst identifiziert unsere Analyse Variablen, die einen statistisch signifikanten Einfluss auf die zu erklärende Variable (Kauf der Autoversicherung) haben. Variablen, auf die das Versicherungsunternehmen direkt Einfluss nehmen kann, können so verändert werden, dass die Kaufwahrscheinlichkeit erhöht wird. Andere Einflussfaktoren, auf die das Unternehmen keinen direkten Einfluss hat, können dazu genutzt werden, um gezielt nach potenziellen Kunden Ausschau zu halten, die Eigenschaften aufweisen, die hohe Kaufbereitschaft erwarten lassen. 
 Erkenntnisse der zweiten Kategorie beziehen sich auf die Prognoseleistung des Modells. Mithilfe des Modells können wir potenzielle Kunden gemäß ihrer prognostizierten Kaufwahrscheinlichkeit in Käufer und Nicht-Käufer aufteilen. Indem wir anschließend ausschließlich die als Käufer klassifizierten Personen kontaktieren, reduzieren wir die Kosten der Werbekampagne und erhöhen die Erolgsquote der Kampagne von `r  formattable::percent(mean_CarInsurance_test)` auf `r formattable::percent(pos_pred_value)`.
 
 ## Literaturverzeichnis

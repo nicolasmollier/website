@@ -10,6 +10,7 @@ output: html_document
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 
+<p>Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden. Anhand der Analyse eines Datensatzes, der 4000 Versicherungskunden umfasst, zeigen wir, wie der Verkaufsprozess zielgerichteter und effizienter gestaltet werden kann. Die Umsetzung der Erkenntnisse unserer Analyse kann Bares Geld sparen.</p>
 <div id="die-daten" class="section level2">
 <h2>Die Daten</h2>
 <p>Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen <em>CallStart</em> und <em>CallEnd</em> zur Variablen <em>CallDuration</em> kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen <em>CallStart</em> die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable <em>Verkaufserfolg</em> zu erklären.</p>
@@ -698,12 +699,12 @@ CallDuration
 </div>
 <div id="prognoseleistung" class="section level2">
 <h2>Prognoseleistung</h2>
-<p>Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 40% beträgt. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von 79.50% vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu 77.16% als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu 81.02% korrekt vorhergesagt werden.
+<p>Die logistische Regression liefert uns zunächst für jeden einzelnen Kunden des Testdatensatzes Kaufwahrscheinlichkeiten. Ein Kunde wird von uns als Käufer klassifiziert, wenn die für ihn prognostizierte Kaufwahrscheinlichkeit größer als 40% ist. Das Modell ist in der Lage, die Kaufentscheidung der Kunden aus dem Testdatensatz mit einer Genauigkeit von 79.50% vorherzusagen. Kunden, die letztendlich die Versicherung kauften, wurden zu 77.16% als Käufer prognostiziert. Kunden, die sich letztendlich gegen die Versicherung entschieden, konnten von dem Modell zu 81.02% korrekt vorhergesagt werden.
 Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Modells. Die AUC kann Werte zwischen 0 und 1 annehmen. In unserem Fall liefert das Modell eine AUC von 86.00%.</p>
 </div>
 <div id="ökonomische-bedeutung" class="section level2">
 <h2>Ökonomische Bedeutung</h2>
-<p>Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von <em>Odds</em> verstehen. <em>Odds</em> beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt(in unserem Fall: kein Abschluss der Versicherung).</p>
+<p>Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von <em>Odds</em> verstehen. <em>Odds</em> beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt (in unserem Fall: kein Abschluss der Versicherung).</p>
 <p><span class="math display">\[ Odds = \frac{P(Y = 1)}{P(Y = 0)} \]</span></p>
 <p>Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule).</p>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
@@ -803,7 +804,7 @@ CallDuration
 <div id="fazit" class="section level2">
 <h2>Fazit</h2>
 <p>Unsere Analyse liefert Erkenntnisse, die in zwei Kategorien zu unterteilen sind.
-Zunächst identifiziert unsere Analyse Variablen, die einen statistisch signifikanten Einfluss auf die zu erklärende Variable (Kauf der Autoversicherung) haben. Variablen, auf die das Versicherung direkt Einfluss nehmen kann, können so verändert werden, dass die Kaufwahrscheinlichkeit erhöht wird. Andere Einflussfaktoren, auf die das Unternehmen keinen direkten Einfluss hat, können dazu genutzt werden, um gezielt nach potenziellen Kunden Ausschau zu halten, die Eigenschaften aufweisen, die hohe Kaufbereitschaft erwarten lassen.
+Zunächst identifiziert unsere Analyse Variablen, die einen statistisch signifikanten Einfluss auf die zu erklärende Variable (Kauf der Autoversicherung) haben. Variablen, auf die das Versicherungsunternehmen direkt Einfluss nehmen kann, können so verändert werden, dass die Kaufwahrscheinlichkeit erhöht wird. Andere Einflussfaktoren, auf die das Unternehmen keinen direkten Einfluss hat, können dazu genutzt werden, um gezielt nach potenziellen Kunden Ausschau zu halten, die Eigenschaften aufweisen, die hohe Kaufbereitschaft erwarten lassen.
 Erkenntnisse der zweiten Kategorie beziehen sich auf die Prognoseleistung des Modells. Mithilfe des Modells können wir potenzielle Kunden gemäß ihrer prognostizierten Kaufwahrscheinlichkeit in Käufer und Nicht-Käufer aufteilen. Indem wir anschließend ausschließlich die als Käufer klassifizierten Personen kontaktieren, reduzieren wir die Kosten der Werbekampagne und erhöhen die Erolgsquote der Kampagne von 39.40% auf 72.55%.</p>
 </div>
 <div id="literaturverzeichnis" class="section level2 unnumbered">

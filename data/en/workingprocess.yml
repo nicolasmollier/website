@@ -1,40 +1,40 @@
 enable  : true
-topTitle: HOW WE WORKS
-title   : Our Work Process
-subtitle: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum reiciendis quasi itaque, obcaecati atque sit!
+topTitle: 
+title   : Unser Arbeitsprozess
+subtitle: Unser Arbeitsprozess ist darauf ausgerichtet, Ihre Fragestellung effizient und strukturiert zu beantworten
 item    :
   - number  : 1
     icon    : tf-ion-ios-briefcase-outline
-    title   : Understand the Business Question
+    title   : Verstehe das Problem
     description : >
-      Every project starts with thorough consultation with the client in order to develop a detailed understand of the business problem that needs to be solved.
+      Jedes Projekt beginnt mit gründlichen Erörterungen mit dem Kunden, um ein detailiertes Verständnis des zu lösenden Problems zu entwickeln. Das gesamte Projekt baut auf diesem Schritt auf.
 
   - number  : 2
     icon    : tf-ion-ios-cloud-download-outline
-    title   : Gather Data from different sources
+    title   : Daten sammeln
     description : >
-      Once the Business Problem is understood deeply, we gather the data for the analysis. Data Sources include the clients database and external data sources. 
+      Nachdem die Aufgabenstellung verstanden wurde, sammeln wir die Daten für die Analyse. Datenquellen umfassen neben der Datenbank des Kunden auch externe Datenquellen und eigens gesammelte Daten. 
 
   - number  : 3
     icon    : tf-ion-ios-crop
-    title   : Data Transformation
+    title   : Datentransformation
     description : >
-      Before the analysis can start, the quality of the data needs to be checked and the data needs to be transformed into a format that can be used for data modeling.
+      Bevor die Analyse beginnen kann, muss die Qualität der Daten überprüft werden. Außerdem müssen die Daten in das für die konkrete Analyse erforderliche Format gebracht werden. 
 
   - number  : 4
     icon    : tf-ion-ios-glasses-outline
-    title   : Data Exploration 
+    title   : Datenexploration 
     description : >
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis.
 
   - number: 5
     icon: tf-ion-ios-analytics-outline
-    title: Data Modeling
+    title: Modellierung 
     description: >
         dslsdlsd.
 
   - number: 6
     icon: tf-ion-ios-pie-outline
-    title: Presentation
+    title: Präsentation
     description: >
         sdsdsd.
