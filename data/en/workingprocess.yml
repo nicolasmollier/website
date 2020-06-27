@@ -31,10 +31,10 @@ item    :
     icon: tf-ion-ios-analytics-outline
     title: Modellierung 
     description: >
-        dslsdlsd.
+        Die während der Exploration gebildeten Hypothesen werden auf ihre statistische Signifikanz überprüft. Modelle werden gebildet, um den Einfluss von Variablen zu quantifizieren und Prognosen zu treffen.
 
   - number: 6
     icon: tf-ion-ios-pie-outline
     title: Präsentation
     description: >
-        sdsdsd.
+        Die Ergebnisse der Analysen werden in einem Bericht und einer Präsentation zusammengefasst. Die wirtschaftliche Relevanz der Ergebnisse wird erläutert. Empfehlungen werden präsentiert.

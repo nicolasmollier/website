@@ -105,9 +105,9 @@ btnText = "Nous contacter"
 ############# 2 - Site en ENGLISH
 [Languages.en]
 weight = 2
-languageCode = "en-us"
+languageCode = "de"
 title = "Datalytics"
-dateFormat = "January 2, 2006"
+dateFormat = "02.01.2006"
 
 home = "Start"
 logo = "images/logo.png"
@@ -149,8 +149,8 @@ enable  = true
 #topTitle= "DROP US A NOTE"
 title   = "Kontaktformular"
 subtitle= "Schicken Sie uns eine Anfrage über unser Kontaktformular. Wir melden uns umgehend bei Ihnen."
-address = "Schulstraße 6 <br> 65618 Selters-Haintchen , Deutschland"
-phone   = "(49) 157 50288464"
+address = "Schulstraße 6 <br> 65618 Selters"
+phone   = "0157 50288464"
 email = "nicolas.mollier@gmx.de"
 #fax     = "+61 3827 3590"
 #facebook= "https://www.facebook.com/"
@@ -202,15 +202,15 @@ weight  = 6
 
 # Footer Service Menu
 [[menu.service]]
-name    = "Analyse"
+name    = "graphicdesign"
 url     = "service"
 weight  = 1
 [[menu.service]]
-name    = "Beratung"
+name    = "webdesign"
 url     = "service"
 weight  = 2
 [[menu.service]]
-name    = "Marketing"
+name    = "webdevelopment"
 url     = "service"
 weight  = 3
 
