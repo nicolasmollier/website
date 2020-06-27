@@ -25,7 +25,7 @@ item    :
     icon    : tf-ion-ios-glasses-outline
     title   : Datenexploration 
     description : >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis.
+      Die Datenexploration dient dazu, den Datensatz kennenzulernen. Dieser Schritt umfasst insbesondere Visualisierungen. Am Ende der Exploration stehen Hypothesen, die im nächsten Schritt getestet werden.
 
   - number: 5
     icon: tf-ion-ios-analytics-outline

@@ -1,3 +1,4 @@
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 baseURL = "https://infallible-jang-09ce2a.netlify.app"
 languageCode = "en-us"
 title = "Datalytics"

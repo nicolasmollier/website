@@ -1,6 +1,6 @@
 enable    : true
 # topTitle  : A LIST OF SERVICES
-title     : Unser Service.
+title     : Unser Service
 subtitle  : Wir helfen Ihnen dabei, mithilfe von Daten bessere Entscheidungen zu treffen, Probleme effizient zu lösen und Ihre Kunden besser zu verstehen
 item      :
   - icon  : tf-ion-ios-pie-outline
