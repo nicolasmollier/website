@@ -39,12 +39,12 @@ Anova_Table <- function(aov, caption = "", position = "center"){
 }
 ```
 
-Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden. Anhand der Analyse eines Datensatzes, der 4000 Versicherungskunden umfasst, zeigen wir, wie der Verkaufsprozess zielgerichteter und effizienter gestaltet werden kann. Die Umsetzung der Erkenntnisse unserer Analyse kann Bares Geld sparen.
+Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden. Anhand der Analyse eines Datensatzes, der 4000 Versicherungskunden umfasst, zeigen wir, wie der Verkaufsprozess zielgerichteter und effizienter gestaltet werden kann. Die Umsetzung der Erkenntnisse unserer Analyse kann zu signifikanten Kostenersparnissen und Effizienzsteigerungen führen.
 
 ## Die Daten
 
 
-Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *CallStart* und *CallEnd* zur Variablen *CallDuration* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *CallStart* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg* zu erklären.  
+Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen *Gesprächsbeginn* und *Gesprächsende* zur Variablen *Gesprächsdauer* kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen *Gesprächsbeginn* die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable *Verkaufserfolg (Autoversicherung)* zu erklären. Tabelle 1 zeigt einen Auszug aus dem untersuchten Datensatz.
 
 ```{r Datenimport, include = FALSE}
 df <- read_csv("carInsurance_train.csv", 
@@ -70,6 +70,16 @@ df$CarLoan <- df$CarLoan %>%
   fct_recode(No = "0", Yes = "1")
 df <- df %>% 
   mutate(Education = fct_relevel(Education, c("primary", "secondary", "tertiary", "(Missing)")))
+df <- df %>% 
+  rename(Alter = Age, Beruf = Job, Beziehungsstatus = Marital, Bildung = Education, Zahlungsverzug = Default, Kontostand = Balance, Haushaltsversicherung = HHInsurance, Autokredit = CarLoan, Kommunikationsmittel = Communication, LetzterKontakt_Monat = LastContactMonth, LetzterKontakt_Tag = LastContactDay, Gesprächsbeginn = CallStart, Gesprächsende = CallEnd, AnzahlKontakte = NoOfContacts, vergangeTage = DaysPassed, vorhergehendeKontakte = PrevAttempts, Erfolg_letzteKampagne = Outcome, Autoversicherung = CarInsurance, Gesprächsdauer = CallDuration, Anrufzeit = CallHour)
+df$Beruf <- fct_recode(df$Beruf, Management = "management", Arbeiter = "blue-collar", Student = "student", Facharbeiter = "technician", Verwaltung = "admin.", Services = "services", Selbstständig = "self-employed", Rentner = "retired", Hausfrau = "housemaid", Unternehmer = "entrepreneur", Arbeitslos = "unemployed" )
+df$Beziehungsstatus <- fct_recode(df$Beziehungsstatus, Single = "single", Verheiratet = "married", Geschieden = "divorced")
+df$Bildung <- fct_recode(df$Bildung, Primär = "primary", Sekundär = "secondary", Tertiär = "tertiary")
+df$Haushaltsversicherung <- ifelse(df$Haushaltsversicherung == "Yes", "Ja", "Nein")
+df$Autokredit <- ifelse(df$Autokredit == "Yes", "Ja", "Nein")
+df$Kommunikationsmittel <- ifelse(df$Kommunikationsmittel == "telephone", "Festnetz", "Mobiltelefon")
+df$LetzterKontakt_Monat <- fct_recode(df$LetzterKontakt_Monat, Mär = "Mar", Mai = "May", Okt = "Oct", Dez = "Dec")
+df$Erfolg_letzteKampagne <- fct_recode(df$Erfolg_letzteKampagne, Misserfolg = "failure", Andere = "other", Erfolg = "success")
 ```
 
 
@@ -79,7 +89,7 @@ df <- df %>%
 #                         caption = "Datensatz")
 
 df %>% 
-  head() %>% 
+  head(n = 50) %>% 
   kable(caption = "Datensatz") %>% 
   kable_styling(bootstrap_options = c("striped", "hover")) %>% 
   scroll_box(width = "100%", height = "300px")
@@ -90,10 +100,10 @@ summary(df)
 ```
 
 ```{r Missings}
-df$Job <- fct_explicit_na(df$Job)
-df$Education <- fct_explicit_na(df$Education)
-df$Communication <- fct_explicit_na(df$Communication)
-df$Outcome <- fct_explicit_na(df$Outcome)
+df$Beruf <- fct_explicit_na(df$Beruf)
+df$Bildung <- fct_explicit_na(df$Bildung)
+df$Kommunikationsmittel <- fct_explicit_na(df$Kommunikationsmittel)
+df$Erfolg_letzteKampagne <- fct_explicit_na(df$Erfolg_letzteKampagne)
 ```
 
 ```{r Train_Test_Split}
@@ -102,14 +112,14 @@ valid_anteil <- .25
 test_anteil <- .25
 
 set.seed(12345)
-trainIndex <- caret::createDataPartition(y = df$CarInsurance,
+trainIndex <- caret::createDataPartition(y = df$Autoversicherung,
                                          p = .5,
                                          list = FALSE,
                                          times = 1)
 df_train <- df[trainIndex, ]
 df_test_valid <- df[-trainIndex, ]
 
-valid_index <- caret::createDataPartition(y = df_test_valid$CarInsurance,
+valid_index <- caret::createDataPartition(y = df_test_valid$Autoversicherung,
                                           p = .5,
                                           list = FALSE,
                                           times = 1)
@@ -119,7 +129,7 @@ df_test <- df_test_valid[-valid_index, ]
 ```
 ---
 
-Der Datensatz wird in Trainingsdatensatz (`r formattable::percent(train_anteil)`), Validierungsdatensatz (`r formattable::percent(valid_anteil)`) und Testdatensatz (`r formattable::percent(test_anteil)`) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben [@wickham2016r]. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden. 
+Der Datensatz wird in Trainingsdatensatz (`r formattable::percent(train_anteil)`), Validierungsdatensatz (`r formattable::percent(valid_anteil)`) und Testdatensatz (`r formattable::percent(test_anteil)`) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können, Wieterhin werden während der Exploration Hypothesen gebildet. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben [@wickham2016r]. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden. 
 
 
 
@@ -130,60 +140,60 @@ Der Datensatz wird in Trainingsdatensatz (`r formattable::percent(train_anteil)`
 
 ```{r Mittelwertberechnungen, include = FALSE}
 HHInsurance_mean <- df_train %>% 
-  group_by(HHInsurance) %>% 
-  summarize(mean = mean(CarInsurance))
+  group_by(Haushaltsversicherung) %>% 
+  summarize(mean = mean(Autoversicherung))
 
 CarLoan_mean <- df_train %>% 
-  group_by(CarLoan) %>% 
-  summarize(mean = mean(CarInsurance))
+  group_by(Autokredit) %>% 
+  summarize(mean = mean(Autoversicherung))
 
 Anteil_NoOfContacts_kleiner_gleich_10 <- df_train %>% 
-  count(NoOfContacts) %>% 
+  count(AnzahlKontakte) %>% 
   mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df_train)) %>% 
-  filter(NoOfContacts == 10) %>% 
+  filter(AnzahlKontakte == 10) %>% 
   select(Anteil) %>% 
   as_vector() %>% 
   scales::percent() 
 
 Anteil_Prev_Attempts_kleiner_gleich_10 <- df_train %>% 
-  count(PrevAttempts) %>% 
+  count(vorhergehendeKontakte) %>% 
   mutate(CumSum = cumsum(n), Anteil = CumSum / nrow(df_train)) %>% 
-  filter(PrevAttempts == 10) %>% 
+  filter(vorhergehendeKontakte == 10) %>% 
   select(Anteil) %>% 
   as_vector() %>% 
   scales::percent() 
 ```
 
-Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "No", "mean"] %>% as_vector() %>% formattable::percent()` deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in `r HHInsurance_mean[HHInsurance_mean$HHInsurance == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` der Fälle. Kunden ohne Autokredit kauften zu `r CarLoan_mean[CarLoan_mean$CarLoan == "No", "mean"] %>% as_vector() %>% formattable::percent()` während Kunden mit Autokredit nur zu `r CarLoan_mean[CarLoan_mean$CarLoan == "Yes", "mean"] %>% as_vector() %>% formattable::percent()` eine Autoversicherung abschlossen.
+Betrachtet man die Variablen Beziehungsstatus, Bildung, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit `r HHInsurance_mean[HHInsurance_mean$Haushaltsversicherung == "Nein", "mean"] %>% as_vector() %>% formattable::percent()` deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in `r HHInsurance_mean[HHInsurance_mean$Haushaltsversicherung == "Ja", "mean"] %>% as_vector() %>% formattable::percent()` der Fälle. Kunden ohne Autokredit kauften zu `r CarLoan_mean[CarLoan_mean$Autokredit == "Nein", "mean"] %>% as_vector() %>% formattable::percent()` während Kunden mit Autokredit nur zu `r CarLoan_mean[CarLoan_mean$Autokredit == "Ja", "mean"] %>% as_vector() %>% formattable::percent()` eine Autoversicherung abschlossen.
 
 ```{r Graphical EDA1, out.width="48%", fig.height=2, fig.width = 3.3}
 df_train %>% 
-  group_by(Marital) %>% 
-  summarize(CarInsurance = mean(CarInsurance)) %>% 
-  ggplot(aes(fct_reorder(Marital, CarInsurance, max), CarInsurance)) +
+  group_by(Beziehungsstatus) %>% 
+  summarize(Autoversicherung = mean(Autoversicherung)) %>% 
+  ggplot(aes(fct_reorder(Beziehungsstatus, Autoversicherung, max), Autoversicherung)) +
   geom_bar(stat = "identity", width = 0.5) +
   labs(x = "", y = "Erfolgsquote", title = "Beziehungsstatus")
 
 df_train %>% 
-  group_by(Education) %>% 
-  summarize(CarInsurance = mean(CarInsurance)) %>% 
-  ggplot(aes(fct_reorder(Education, CarInsurance, max), CarInsurance)) +
+  group_by(Bildung) %>% 
+  summarize(Autoversicherung = mean(Autoversicherung)) %>% 
+  ggplot(aes(fct_reorder(Bildung, Autoversicherung, max), Autoversicherung)) +
   geom_bar(stat = "identity", width = 0.65) +
   labs(x = "", y = "Erfolgsquote", title = "Bildungsniveau")
 
 
 df_train %>% 
-  group_by(HHInsurance) %>% 
-  summarize(CarInsurance = mean(CarInsurance)) %>% 
-  ggplot(aes(HHInsurance, CarInsurance)) +
+  group_by(Haushaltsversicherung) %>% 
+  summarize(Autoversicherung = mean(Autoversicherung)) %>% 
+  ggplot(aes(Haushaltsversicherung, Autoversicherung)) +
   geom_bar(stat = "identity", width = 0.35) +
   labs(x = "", y = "Erfolgsquote", title = "Haushaltsversicherung")
 
 
 df_train %>% 
-  group_by(CarLoan) %>% 
-  summarize(CarInsurance = mean(CarInsurance)) %>% 
-  ggplot(aes(CarLoan, CarInsurance)) +
+  group_by(Autokredit) %>% 
+  summarize(Autoversicherung = mean(Autoversicherung)) %>% 
+  ggplot(aes(Autokredit, Autoversicherung)) +
   geom_bar(stat = "identity", width = 0.35) +
   labs(x = "", y = "Erfolgsquote", title = "Autokredit")
 
@@ -191,7 +201,7 @@ df_train %>%
 
 Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu beachten, dass die Verteilung dieser Variablen extrem schief ist. `r Anteil_NoOfContacts_kleiner_gleich_10` der Kunden wurden nicht öfter als 10 mal kontaktiert. Betrachtet man diese `r Anteil_NoOfContacts_kleiner_gleich_10` der Kunden, zeichnet sich ein Trend ab, demzufolge der Verkaufserfolg mit der Anzahl der Kontakte abnimmt. ^[Kunden, die öfter als 10 mal kontaktiert wurden, werden bei dieser Betrachtug deshalb nicht berücksichtigt, da nur extrem wenige Kunden so oft kontaktiert wurden. Sie mit in die Betrachtung aufzunehmen würde dazu führen, dass sehr wenige Kunden pro Ausprägung der Variablen vorlägen und diese Kunden so übermäßig viel Einfluss auf die durchschnittliche Erfolgsquote je Kontaktanzahl hätten im Vergleich zu Kunden mit weniger Kontaktierungen.] 
 
-Die Variable *PrevAttempts* gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen *NoOfContacts*. `r Anteil_Prev_Attempts_kleiner_gleich_10` der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.
+Die Variable *vorhergehendeKontakte* gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen *AnzahlKontakte*. `r Anteil_Prev_Attempts_kleiner_gleich_10` der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.
 
 Auch die Dauer des Gesprächs zeigt eine Korrleation mit Kaufentscheidung bezüglich der Autoversicherung. Gespräche, die zu einem Kaufabschluss führen, dauern deutlich länger als Gespräche, die nicht mit einem Kauf enden.
 
@@ -200,19 +210,19 @@ Auch die Dauer des Gesprächs zeigt eine Korrleation mit Kaufentscheidung bezüg
 
 ```{r Graphical EDA2, out.width="33%", fig.height=2.8, fig.width = 3}
 df_NoOfContacts <- df_train %>% 
-  filter(NoOfContacts <= 10) %>% 
-  mutate(NoOfContacts = factor(NoOfContacts))
-BarPlot(df_NoOfContacts, "NoOfContacts", "CarInsurance", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "während Kampagne")
+  filter(AnzahlKontakte <= 10) %>% 
+  mutate(AnzahlKontakte = factor(AnzahlKontakte))
+BarPlot(df_NoOfContacts, "AnzahlKontakte", "Autoversicherung", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "während Kampagne")
 
 df_PrevAttempts <- df_train %>% 
-  filter(PrevAttempts <= 10) %>% 
-  mutate(PrevAttempts = factor(PrevAttempts))
-BarPlot(df_PrevAttempts, "PrevAttempts", "CarInsurance", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "vor der Kampagne")
+  filter(vorhergehendeKontakte <= 10) %>% 
+  mutate(vorhergehendeKontakte = factor(vorhergehendeKontakte))
+BarPlot(df_PrevAttempts, "vorhergehendeKontakte", "Autoversicherung", ylab = "Erfolgsquote", xlab = "", title = "Anzahl der Kontaktierungen", subtitle = "vor der Kampagne")
 
 df_train %>% 
-  mutate(CarInsurance = factor(CarInsurance)) %>% 
-  mutate(CarInsurance = fct_recode(CarInsurance ,No = "0", Yes = "1")) %>% 
-  ggplot(aes(CarInsurance, CallDuration)) +
+  mutate(Autoversicherung = factor(Autoversicherung)) %>% 
+  mutate(Autoversicherung = fct_recode(Autoversicherung ,Nein = "0", Ja = "1")) %>% 
+  ggplot(aes(Autoversicherung, Gesprächsdauer)) +
   geom_boxplot() +
   coord_flip() +
   labs(y = "", x = "Kaufabschluss", title = "Dauer des Verkaufgesprächs", subtitle = "in Sekunden") +
@@ -249,10 +259,10 @@ Folgende Hypothesen wurden basierend auf der Exploration mithilfe des Trainingsd
 
 <!-- end of list -->
 
-Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.
+Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene eher dazu neigen, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.
 
 ```{r Model 1, include = FALSE}
-mod <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + NoOfContacts + PrevAttempts + CallDuration + Marital + CallDuration,
+mod <- glm(Autoversicherung ~ Bildung + Haushaltsversicherung + Autokredit + AnzahlKontakte + vorhergehendeKontakte + Gesprächsdauer + Beziehungsstatus,
            family = "binomial",
            data = df_valid)
 summary_mod <- summary(mod)
@@ -262,7 +272,7 @@ summary_mod$coefficients %>%
 ```
 
 ```{r , fig.align = "center"}
-mod_without_marital <- glm(CarInsurance ~ Education + HHInsurance + CarLoan + NoOfContacts + PrevAttempts + CallDuration + CallDuration,
+mod_without_marital <- glm(Autoversicherung ~ Bildung + Haushaltsversicherung + Autokredit + AnzahlKontakte + vorhergehendeKontakte + Gesprächsdauer,
                            family = "binomial",
                            data = df_valid)
 summary_mod_without_marital <- summary(mod_without_marital)
@@ -291,13 +301,13 @@ df_test <- df_test %>%
   add_predictions(mod_without_marital, type = "response") %>% 
   mutate(pred_binary = ifelse(pred > 0.4, 1, 0))
 confusion_matrix <- caret::confusionMatrix(data = as_factor(df_test$pred_binary),
-                       reference = as_factor(df_test$CarInsurance),
+                       reference = as_factor(df_test$Autoversicherung),
                        positive = "1")
 
 accuracy <- confusion_matrix$overall["Accuracy"]
 sensitivität <- confusion_matrix$byClass["Sensitivity"] 
 specificity <- confusion_matrix$byClass["Specificity"]
-area_under_curve <- auc(roc(data = df_test, response = CarInsurance, predictor = pred))
+area_under_curve <- auc(roc(data = df_test, response = Autoversicherung, predictor = pred))
 
 ```
 
@@ -319,9 +329,9 @@ Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Mode
 
 Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von *Odds* verstehen. *Odds* beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt (in unserem Fall: kein Abschluss der Versicherung).
 
-$$ Odds = \frac{P(Y = 1)}{P(Y = 0)} $$
+$$ Odds = \frac{P("Erfolg")}{P("Misserfolg")} $$
 
-Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). 
+Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden ohne Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 247% höher als bei einem Kunden mit Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). Ein Kunde ohne Autokredit hat um den Faktor 2.4 höhere Odds als ein Kunde mit Autokredit.
 
 ```{r}
 exp(coef(mod_without_marital)) %>% 
@@ -331,22 +341,24 @@ exp(coef(mod_without_marital)) %>%
 
 Die ökonomische Bedeutung der Ergebnisse kann in zwei Teile unterteilt werden. 
 
-Zunächst sind die Variablen der logistischen Regression danach zu unterscheiden, ob das Versicherungsunternehmen Einfluss auf deren Ausprägungen hat. Das Versicherungsunternehmen kann den Bildungsstand seiner Kunden nicht verändern. Genauso wenig kann beeinflusst werden, ob der potenzielle Kunde einen Autokredit hat oder nicht. Auf der anderen Seite kann das Unternehmen die Anzahl der Kontaktierungen vor und während der Kampagne beeinflussen. Ob eine Haushaltsversicherung vorliegt, stellt einen Spezialfall dar, auf den wir zum Schluss zu sprechen kommen. 
+Zunächst sind die Variablen der logistischen Regression danach zu unterscheiden, ob das Versicherungsunternehmen Einfluss auf deren Ausprägungen hat. Das Versicherungsunternehmen kann den Bildungsstand seiner Kunden nicht verändern. Genauso wenig kann beeinflusst werden, ob der potenzielle Kunde einen Autokredit hat oder nicht. Auf der anderen Seite kann das Unternehmen die Anzahl der Kontaktierungen vor und während der Kampagne beeinflussen.
 
-Die Variablen *Bildungsstand* und *Autokredit* sind ökonomische bedeutsam, obwohl sie nicht durch das Unternehmen verändert werden können. Allerdings kann das Wissen um die Bedeutung der Variablen für die Erfolgsquote bei Versicherungsabschlüssen dazu genutzt werden, um gezielt potenzielle Kunden anzusprechen, die einen hohen Bildungsstand und keinen Autokredit haben, um so die Erfolgschancen zu erhöhen. Dieses gezielte Vorgehen erhöht die Effizienz der Werbemaßnahmen, da die Verschwendung von Unternehmensressourcen bei dem Versuch, Kunden mit geringer Kaufwahrscheinlichkeit zu werben, deutlich reduziert werden kann. Die Verkäufer der Versicherung können sich so gezielt auf die profitabelsten Kunden konzentrieren.
+<!-- Ob eine Haushaltsversicherung vorliegt, stellt einen Spezialfall dar, auf den wir zum Schluss zu sprechen kommen. -->
+
+Die Variablen *Bildung* und *Autokredit* sind ökonomische bedeutsam, obwohl sie nicht durch das Unternehmen verändert werden können. Allerdings kann das Wissen um die Bedeutung der Variablen für die Erfolgsquote bei Versicherungsabschlüssen dazu genutzt werden, um gezielt potenzielle Kunden anzusprechen, die einen hohen Bildungsstand und keinen Autokredit haben, um so die Erfolgschancen zu erhöhen. Dieses gezielte Vorgehen erhöht die Effizienz der Werbemaßnahmen, da die Verschwendung von Unternehmensressourcen bei dem Versuch, Kunden mit geringer Kaufwahrscheinlichkeit zu werben, deutlich reduziert werden kann. Die Verkäufer der Versicherung können sich so gezielt auf die profitabelsten Kunden konzentrieren.
 
 
 
-Die Variablen *Anzahl der Kontaktierungen vor der Kampagne* und *Anzahl der Kontaktierungen nach der Kampagne* sind besonders interessant, da das Versicherungsunternehmen deren Ausprägung direkt beeinflussen kann. Um den Kampagnenerfolg zu steigern, kann das Unternehmen gemäß unserer Analyse bereits vor der Kampagne Maßnahmen ergreifen. Hartnäckigkeit scheint sich auszuzahlen. Da die Anzahl der Verkaufsversuche in der Vergangenheit einen positiven Effekt auf die Erfolgsquote in späteren Kampagnen hat, sollten auch Kunden, die in der Vergangenheit mehrfach nicht zum Abschluss einer Autoversicherung bewogen werden konnten, dennoch erneut kontaktiert werden. Allerdings muss dabei beachtet werden, dass sich der gewünschte Erfolg erst mit zeitlicher Verzögerung einstellt. Kurzfristig wirken sich zu häufige Kontaktversuche negativ auf die Kaufbereitschaft der Kunden aus. Möglicherweise muss die Vergütung der Verkäufer diesem Umstand auch Rechnung tragen. Es ist zu überlegen, ob nicht nur der Verkäufer der den Abschluss erreicht, eine Provision erhält, sondern auch derjenige, der mit seinen wiederholten Versuchen in der Vergangenheit, die Wahrscheinlichkeit für den finalen Vertragsabschluss erhöht hat.
+Die Variablen *vorhergehendeKontakte* und *AnzahlKontakte* sind besonders interessant, da das Versicherungsunternehmen deren Ausprägung direkt beeinflussen kann. Um den Kampagnenerfolg zu steigern, kann das Unternehmen gemäß unserer Analyse bereits vor der Kampagne Maßnahmen ergreifen. Hartnäckigkeit scheint sich auszuzahlen. Da die Anzahl der Verkaufsversuche in der Vergangenheit einen positiven Effekt auf die Erfolgsquote in späteren Kampagnen hat, sollten auch Kunden, die in der Vergangenheit mehrfach nicht zum Abschluss einer Autoversicherung bewogen werden konnten, dennoch erneut kontaktiert werden. Allerdings muss dabei beachtet werden, dass sich der gewünschte Erfolg erst mit zeitlicher Verzögerung einstellt. Kurzfristig wirken sich zu häufige Kontaktversuche negativ auf die Kaufbereitschaft der Kunden aus. Möglicherweise muss die Vergütung der Verkäufer diesem Umstand auch Rechnung tragen. Es ist zu überlegen, ob nicht nur der Verkäufer der den Abschluss erreicht, eine Provision erhält, sondern auch derjenige, der mit seinen wiederholten Versuchen in der Vergangenheit, die Wahrscheinlichkeit für den finalen Vertragsabschluss erhöht hat.
 
 
 ```{r gezielte Kundenansprache}
-mean_CarInsurance_test <- mean(df_test$CarInsurance)
+mean_CarInsurance_test <- mean(df_test$Autoversicherung)
 pos_pred_value <- confusion_matrix$byClass["Pos Pred Value"]
 anzahl_kontaktierungen <- sum(df_test$pred_binary)
 ```
 
-Es ist kostspielig für Versicherungsunternehmen, Versicherungen zu verkaufen. Es müssen Verkaufsmaterialien produziert, Marketingmaßnahmen müssen geplant und umgesetzt und Personal für den Verkauf muss bezahlt werden. Aus diesem Grund ist es wichtig, dass gezielt diejenigen potenziellen Kunden angesprochen werden, die eine hohe Kaufwahrscheinlichkeit aufweisen. In unserem Testdatensatz war die Versicherung mit dem Versuch, Autoversicherungen zu verkaufen bei `r mean_CarInsurance_test %>% formattable::percent()` der umworbenen Kunden erfolgreich. In `r 1 - mean_CarInsurance_test %>% formattable::percent()` der Fälle war der Verkaufsversuch vergeblich und die Kosten für Personal, Material und Marketing vergeudet. Hätte die Versicherung ihre Kampagne stattdessen auf unserem Modell aufgebaut, wären viele der vergeblichen Werbeversuche vermieden worden. Unser Modell war in der Lage zu `r formattable::percent(specificity)` Personen, die im Verlauf der Kampagne ohnehin nicht kaufen würden, korrekt zu erkennen. Die Kosten, die durch die Werbeversuche bei diesen Personen entstanden sind, hätten vermieden werden können. Das wahrlose Kontaktieren von Personen hätte im Fall des Testdatensatzes eine Erfolgsquote von `r mean_CarInsurance_test` erzielt. Das gezielte Kontaktieren von den Kunden mit hoher Kaufwahrscheinlichkeit gemäß unserem Modell hätte hingegen dazu geführt, dass `r formattable::percent(pos_pred_value)` der kontaktierten Kunden gekauft hätten. Auf der anderen Seite ist aber wichtig, nicht nur Werbeversuche bei Kunden mit geringer Kaufwahrscheinlichkeit zu vermeiden, sondern auch möglichst viele der kaufbereiten Kunden zu identifizieren und zu kontaktieren. Klassifiziert man alle Kunden als Käufer, die eine Kaufwahrscheinlichkeit gemäß unserer Modellprognose von mehr als 40% aufweisen, so ist unser Modell in der Lage, `r formattable::percent(sensitivität)` der Kunden, die letzendlich kauften, im Voraus korrekt zu identifizieren. Somit kann durch eine Werbekampagne auf Basis unseres Modells der Anteil der Misserfolge von `r 1 - mean_CarInsurance_test %>% formattable::percent()` auf `r 1 - formattable::percent(pos_pred_value)` reduziert, die Zahl der notwendigen Kontaktierungen von `r 1000` auf `r anzahl_kontaktierungen` verringert und `r formattable::percent(sensitivität)` der tatsächlich Kaufbereiten von unserer Kampagne erreicht werden. 
+Es ist kostspielig für Versicherungsunternehmen, Versicherungen zu verkaufen. Es müssen Verkaufsmaterialien produziert, Marketingmaßnahmen müssen geplant und umgesetzt und Personal für den Verkauf muss bezahlt werden. Aus diesem Grund ist es wichtig, dass gezielt diejenigen potenziellen Kunden angesprochen werden, die eine hohe Kaufwahrscheinlichkeit aufweisen. In unserem Testdatensatz war das Versicherungsunternehmen mit dem Versuch, Autoversicherungen zu verkaufen bei `r mean_CarInsurance_test %>% formattable::percent()` der umworbenen Kunden erfolgreich. In `r 1 - mean_CarInsurance_test %>% formattable::percent()` der Fälle war der Verkaufsversuch vergeblich und die Kosten für Personal, Material und Marketing vergeudet. Hätte die Versicherung ihre Kampagne stattdessen auf unserem Modell aufgebaut, wären viele der vergeblichen Werbeversuche vermieden worden. Unser Modell war in der Lage zu `r formattable::percent(specificity)` Personen, die im Verlauf der Kampagne ohnehin nicht kaufen würden, korrekt zu erkennen. Die Kosten, die durch die Werbeversuche bei diesen Personen entstanden sind, hätten vermieden werden können. Das wahrlose Kontaktieren von Personen hätte im Fall des Testdatensatzes eine Erfolgsquote von `r formattable::percent(mean_CarInsurance_test)` erzielt. Das gezielte Kontaktieren von den Kunden mit hoher Kaufwahrscheinlichkeit gemäß unserem Modell hätte hingegen dazu geführt, dass `r formattable::percent(pos_pred_value)` der kontaktierten Kunden gekauft hätten. Auf der anderen Seite ist aber wichtig, nicht nur Werbeversuche bei Kunden mit geringer Kaufwahrscheinlichkeit zu vermeiden, sondern auch möglichst viele der kaufbereiten Kunden zu identifizieren und zu kontaktieren. Klassifiziert man alle Kunden als Käufer, die eine Kaufwahrscheinlichkeit gemäß unserer Modellprognose von mehr als 40% aufweisen, so ist unser Modell in der Lage, `r formattable::percent(sensitivität)` der Kunden, die letzendlich kauften, im Voraus korrekt zu identifizieren. Somit kann durch eine Werbekampagne auf Basis unseres Modells der Anteil der Misserfolge von `r 1 - mean_CarInsurance_test %>% formattable::percent()` auf `r 1 - formattable::percent(pos_pred_value)` reduziert, die Zahl der notwendigen Kontaktierungen von `r 1000` auf `r anzahl_kontaktierungen` verringert und `r formattable::percent(sensitivität)` der tatsächlich Kaufbereiten von unserer Kampagne erreicht werden. 
 
 
 

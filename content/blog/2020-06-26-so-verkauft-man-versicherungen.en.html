@@ -10,10 +10,10 @@ output: html_document
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 
-<p>Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden. Anhand der Analyse eines Datensatzes, der 4000 Versicherungskunden umfasst, zeigen wir, wie der Verkaufsprozess zielgerichteter und effizienter gestaltet werden kann. Die Umsetzung der Erkenntnisse unserer Analyse kann Bares Geld sparen.</p>
+<p>Versicherungen zu verkaufen ist aufwendig und kostenintensiv. Verkaufsmaterialien müssen erstellt, Marketingkampagnen geplant und umgesetzt und Vertriebspersonal muss bezahlt werden. Anhand der Analyse eines Datensatzes, der 4000 Versicherungskunden umfasst, zeigen wir, wie der Verkaufsprozess zielgerichteter und effizienter gestaltet werden kann. Die Umsetzung der Erkenntnisse unserer Analyse kann zu signifikanten Kostenersparnissen und Effizienzsteigerungen führen.</p>
 <div id="die-daten" class="section level2">
 <h2>Die Daten</h2>
-<p>Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen <em>CallStart</em> und <em>CallEnd</em> zur Variablen <em>CallDuration</em> kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen <em>CallStart</em> die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable <em>Verkaufserfolg</em> zu erklären.</p>
+<p>Der untersuchte Datensatz enthält zunächst 19 Variablen. Aus den bereits enthaltenen Variablen können jedoch weitere Variablen erzeugt werden, die bei der Analyse hilfreich sein können. So wurden die Variablen <em>Gesprächsbeginn</em> und <em>Gesprächsende</em> zur Variablen <em>Gesprächsdauer</em> kombiniert, welche die Dauer des Telefongesprächs misst. Zusätzlich wurde aus der Zeitangabe der Variablen <em>Gesprächsbeginn</em> die Stunde des Anrufs extrahiert, um später analysieren zu können, ob Anrufe zu bestimmten Tageszeiten höhere Erfolgsquoten lieferten. Somit enthält der analysierte Datensatz letztendlich 21 Variablen, von denen 20 dazu genutzt werden können, um die Variable <em>Verkaufserfolg (Autoversicherung)</em> zu erklären. Tabelle 1 zeigt einen Auszug aus dem untersuchten Datensatz.</p>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <caption>
@@ -25,64 +25,64 @@ output: html_document
 Id
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Age
+Alter
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Job
+Beruf
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Marital
+Beziehungsstatus
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Education
+Bildung
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Default
+Zahlungsverzug
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-Balance
+Kontostand
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-HHInsurance
+Haushaltsversicherung
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-CarLoan
+Autokredit
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Communication
+Kommunikationsmittel
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-LastContactDay
+LetzterKontakt_Tag
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-LastContactMonth
+LetzterKontakt_Monat
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-NoOfContacts
+AnzahlKontakte
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-DaysPassed
+vergangeTage
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-PrevAttempts
+vorhergehendeKontakte
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-Outcome
+Erfolg_letzteKampagne
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-CallStart
+Gesprächsbeginn
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-CallEnd
+Gesprächsende
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-CarInsurance
+Autoversicherung
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-CallDuration
+Gesprächsdauer
 </th>
 <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-CallHour
+Anrufzeit
 </th>
 </tr>
 </thead>
@@ -95,13 +95,13 @@ CallHour
 32
 </td>
 <td style="text-align:left;">
-management
+Management
 </td>
 <td style="text-align:left;">
-single
+Single
 </td>
 <td style="text-align:left;">
-tertiary
+Tertiär
 </td>
 <td style="text-align:left;">
 0
@@ -110,13 +110,13 @@ tertiary
 1218
 </td>
 <td style="text-align:left;">
-Yes
+Ja
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-telephone
+Festnetz
 </td>
 <td style="text-align:right;">
 28
@@ -160,13 +160,13 @@ NA
 32
 </td>
 <td style="text-align:left;">
-blue-collar
+Arbeiter
 </td>
 <td style="text-align:left;">
-married
+Verheiratet
 </td>
 <td style="text-align:left;">
-primary
+Primär
 </td>
 <td style="text-align:left;">
 0
@@ -175,10 +175,10 @@ primary
 1156
 </td>
 <td style="text-align:left;">
-Yes
+Ja
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
 NA
@@ -187,7 +187,7 @@ NA
 26
 </td>
 <td style="text-align:left;">
-May
+Mai
 </td>
 <td style="text-align:right;">
 5
@@ -225,13 +225,13 @@ NA
 29
 </td>
 <td style="text-align:left;">
-management
+Management
 </td>
 <td style="text-align:left;">
-single
+Single
 </td>
 <td style="text-align:left;">
-tertiary
+Tertiär
 </td>
 <td style="text-align:left;">
 0
@@ -240,13 +240,13 @@ tertiary
 637
 </td>
 <td style="text-align:left;">
-Yes
+Ja
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-cellular
+Mobiltelefon
 </td>
 <td style="text-align:right;">
 3
@@ -264,7 +264,7 @@ Jun
 1
 </td>
 <td style="text-align:left;">
-failure
+Misserfolg
 </td>
 <td style="text-align:left;">
 16:30:24
@@ -290,13 +290,13 @@ failure
 25
 </td>
 <td style="text-align:left;">
-student
+Student
 </td>
 <td style="text-align:left;">
-single
+Single
 </td>
 <td style="text-align:left;">
-primary
+Primär
 </td>
 <td style="text-align:left;">
 0
@@ -305,19 +305,19 @@ primary
 373
 </td>
 <td style="text-align:left;">
-Yes
+Ja
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-cellular
+Mobiltelefon
 </td>
 <td style="text-align:right;">
 11
 </td>
 <td style="text-align:left;">
-May
+Mai
 </td>
 <td style="text-align:right;">
 2
@@ -355,13 +355,13 @@ NA
 30
 </td>
 <td style="text-align:left;">
-management
+Management
 </td>
 <td style="text-align:left;">
-married
+Verheiratet
 </td>
 <td style="text-align:left;">
-tertiary
+Tertiär
 </td>
 <td style="text-align:left;">
 0
@@ -370,13 +370,13 @@ tertiary
 2694
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-cellular
+Mobiltelefon
 </td>
 <td style="text-align:right;">
 3
@@ -420,13 +420,13 @@ NA
 32
 </td>
 <td style="text-align:left;">
-technician
+Facharbeiter
 </td>
 <td style="text-align:left;">
-single
+Single
 </td>
 <td style="text-align:left;">
-tertiary
+Tertiär
 </td>
 <td style="text-align:left;">
 0
@@ -435,19 +435,19 @@ tertiary
 1625
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-No
+Nein
 </td>
 <td style="text-align:left;">
-cellular
+Mobiltelefon
 </td>
 <td style="text-align:right;">
 22
 </td>
 <td style="text-align:left;">
-May
+Mai
 </td>
 <td style="text-align:right;">
 1
@@ -459,7 +459,7 @@ May
 1
 </td>
 <td style="text-align:left;">
-failure
+Misserfolg
 </td>
 <td style="text-align:left;">
 14:58:08
@@ -477,18 +477,2878 @@ failure
 14
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+1000
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Mär
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+13:00:02
+</td>
+<td style="text-align:left;">
+13:03:17
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+195 secs
+</td>
+<td style="text-align:left;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+538
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+15:39:43
+</td>
+<td style="text-align:left;">
+15:40:49
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+66 secs
+</td>
+<td style="text-align:left;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+9
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+187
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Nov
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+12:20:56
+</td>
+<td style="text-align:left;">
+12:22:42
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+106 secs
+</td>
+<td style="text-align:left;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+09:22:20
+</td>
+<td style="text-align:left;">
+09:27:46
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+326 secs
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:left;">
+Services
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+13:04:28
+</td>
+<td style="text-align:left;">
+13:07:29
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+181 secs
+</td>
+<td style="text-align:left;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Primär
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+-462
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:left;">
+Jan
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+16:45:50
+</td>
+<td style="text-align:left;">
+16:53:40
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+470 secs
+</td>
+<td style="text-align:left;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:left;">
+Facharbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2776
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:left;">
+Jan
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+16:19:41
+</td>
+<td style="text-align:left;">
+16:31:22
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+701 secs
+</td>
+<td style="text-align:left;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:left;">
+Selbstständig
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2674
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+10:29:56
+</td>
+<td style="text-align:left;">
+10:32:39
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+163 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Services
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2022
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:left;">
+Jul
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Andere
+</td>
+<td style="text-align:left;">
+14:15:09
+</td>
+<td style="text-align:left;">
+14:19:45
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+276 secs
+</td>
+<td style="text-align:left;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Aug
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Misserfolg
+</td>
+<td style="text-align:left;">
+16:18:48
+</td>
+<td style="text-align:left;">
+16:20:59
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+131 secs
+</td>
+<td style="text-align:left;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Festnetz
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+362
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Andere
+</td>
+<td style="text-align:left;">
+11:48:45
+</td>
+<td style="text-align:left;">
+11:50:17
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+92 secs
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:right;">
+46
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+7331
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Sep
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Andere
+</td>
+<td style="text-align:left;">
+11:23:26
+</td>
+<td style="text-align:left;">
+11:34:24
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+658 secs
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2039
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+169
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Misserfolg
+</td>
+<td style="text-align:left;">
+12:42:54
+</td>
+<td style="text-align:left;">
+12:50:25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+451 secs
+</td>
+<td style="text-align:left;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Primär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Festnetz
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Apr
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+10:34:08
+</td>
+<td style="text-align:left;">
+10:41:44
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+456 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+21
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+773
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+09:05:50
+</td>
+<td style="text-align:left;">
+09:07:27
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+97 secs
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+22
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:left;">
+Rentner
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+8304
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Festnetz
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+Sep
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Erfolg
+</td>
+<td style="text-align:left;">
+17:37:41
+</td>
+<td style="text-align:left;">
+17:47:47
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+606 secs
+</td>
+<td style="text-align:left;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+23
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+Aug
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+14:28:54
+</td>
+<td style="text-align:left;">
+14:32:32
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+218 secs
+</td>
+<td style="text-align:left;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+24
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:left;">
+Rentner
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2896
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Jul
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+119
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Erfolg
+</td>
+<td style="text-align:left;">
+15:37:19
+</td>
+<td style="text-align:left;">
+15:42:23
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+304 secs
+</td>
+<td style="text-align:left;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+25
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:left;">
+Facharbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+824
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Feb
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+558
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+Andere
+</td>
+<td style="text-align:left;">
+16:30:52
+</td>
+<td style="text-align:left;">
+16:32:59
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+127 secs
+</td>
+<td style="text-align:left;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+26
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+900
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Jul
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+17:06:47
+</td>
+<td style="text-align:left;">
+17:11:22
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+275 secs
+</td>
+<td style="text-align:left;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+27
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Primär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+3859
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Nov
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+10:09:02
+</td>
+<td style="text-align:left;">
+10:10:46
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+104 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+28
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+Apr
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+12:33:22
+</td>
+<td style="text-align:left;">
+12:38:00
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+278 secs
+</td>
+<td style="text-align:left;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+29
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+Services
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+-62
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+13:50:40
+</td>
+<td style="text-align:left;">
+13:52:29
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+109 secs
+</td>
+<td style="text-align:left;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Primär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+832
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+10:36:52
+</td>
+<td style="text-align:left;">
+10:37:05
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+13 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+31
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:left;">
+Facharbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Festnetz
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Apr
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Erfolg
+</td>
+<td style="text-align:left;">
+11:49:24
+</td>
+<td style="text-align:left;">
+12:02:10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+766 secs
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+32
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+6981
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+194
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Misserfolg
+</td>
+<td style="text-align:left;">
+10:23:34
+</td>
+<td style="text-align:left;">
+10:26:08
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+154 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+33
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:left;">
+Rentner
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+842
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Aug
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+10:56:13
+</td>
+<td style="text-align:left;">
+11:00:57
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+284 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+34
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+1057
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Feb
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+15:36:06
+</td>
+<td style="text-align:left;">
+15:42:29
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+383 secs
+</td>
+<td style="text-align:left;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+35
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+1698
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+13:48:54
+</td>
+<td style="text-align:left;">
+13:49:33
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+39 secs
+</td>
+<td style="text-align:left;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+14:50:44
+</td>
+<td style="text-align:left;">
+14:59:10
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+506 secs
+</td>
+<td style="text-align:left;">
+14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+664
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+11:03:37
+</td>
+<td style="text-align:left;">
+11:20:04
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+987 secs
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+38
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Jul
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+15:55:55
+</td>
+<td style="text-align:left;">
+15:56:36
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+41 secs
+</td>
+<td style="text-align:left;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Primär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+138
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Jul
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+13:13:21
+</td>
+<td style="text-align:left;">
+13:24:01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+640 secs
+</td>
+<td style="text-align:left;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+216
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+Nov
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+15:33:58
+</td>
+<td style="text-align:left;">
+15:35:08
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+70 secs
+</td>
+<td style="text-align:left;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+3935
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+17:09:51
+</td>
+<td style="text-align:left;">
+17:12:00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+129 secs
+</td>
+<td style="text-align:left;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+42
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+327
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+11:29:28
+</td>
+<td style="text-align:left;">
+11:31:42
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+134 secs
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+43
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2707
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Feb
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+09:23:59
+</td>
+<td style="text-align:left;">
+09:35:38
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+699 secs
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+2574
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Mai
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+176
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Misserfolg
+</td>
+<td style="text-align:left;">
+10:50:44
+</td>
+<td style="text-align:left;">
+10:57:56
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+432 secs
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Verheiratet
+</td>
+<td style="text-align:left;">
+Tertiär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+Aug
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+11:15:10
+</td>
+<td style="text-align:left;">
+11:15:46
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+36 secs
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+46
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+Arbeiter
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+16:20:13
+</td>
+<td style="text-align:left;">
+16:22:06
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+113 secs
+</td>
+<td style="text-align:left;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+47
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:left;">
+Management
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+283
+</td>
+<td style="text-align:left;">
+Ja
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:left;">
+Jul
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+12:00:12
+</td>
+<td style="text-align:left;">
+12:12:53
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+761 secs
+</td>
+<td style="text-align:left;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+48
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+Rentner
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Primär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Okt
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+16:23:38
+</td>
+<td style="text-align:left;">
+16:42:04
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+1106 secs
+</td>
+<td style="text-align:left;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+49
+</td>
+<td style="text-align:right;">
+46
+</td>
+<td style="text-align:left;">
+Verwaltung
+</td>
+<td style="text-align:left;">
+Single
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Jun
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+17:02:45
+</td>
+<td style="text-align:left;">
+17:03:56
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+71 secs
+</td>
+<td style="text-align:left;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+50
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:left;">
+Facharbeiter
+</td>
+<td style="text-align:left;">
+Geschieden
+</td>
+<td style="text-align:left;">
+Sekundär
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:right;">
+464
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Nein
+</td>
+<td style="text-align:left;">
+Mobiltelefon
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Feb
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+09:31:15
+</td>
+<td style="text-align:left;">
+09:34:42
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+207 secs
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 <hr />
-<p>Der Datensatz wird in Trainingsdatensatz (50.00%), Validierungsdatensatz (25.00%) und Testdatensatz (25.00%) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können und dazu, Hypothesen zu bilden. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben <span class="citation">(Wickham and Grolemund 2016)</span>. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden.</p>
+<p>Der Datensatz wird in Trainingsdatensatz (50.00%), Validierungsdatensatz (25.00%) und Testdatensatz (25.00%) aufgeteilt. Der Trainingsdatensatz wird zur Exploration der Daten genutzt. Die Exploration dient dazu, Muster in den Daten zu entdecken, die später für die Modellierung genutzt werden können, Wieterhin werden während der Exploration Hypothesen gebildet. Daten, die zur Exploration genutzt wurden, dürfen allerdings nicht mehr für die Modellierung genutzt werden, da andernfalls ein erhöhtes Risiko für scheinsignifikante Ergebnisse besteht. Um eine Hypothese bestätigen zu können, dürfen nicht die Daten verwendet werden, die zur Generierung der Hypothese geführt haben <span class="citation">(Wickham and Grolemund 2016)</span>. Hier kommt der Validierungsdatensatz ins Spiel. Da der Validierungsdatensatz nicht zur Entdeckung der Muster genutzt wurde, können mit seiner Hilfe die Hypothesen statistisch getestet werden, die während der Exploration gebildet wurden. Der Testdatensatz wird dazu genutzt, die Prognoseleistung des mithilfe der Validierungsdaten gebildeten Modells zu beurteilen. Zwar geht es bein dieser Analyse in erster Linie darum, Variablen ausfindig zu machen, die statistisch signifikanten Einfluss auf die Erfolgsquote bei dem Versuch haben, Versicherungen zu verkaufen. Die reine Prognose, ob und mit welcher Wahrscheinlichkeit eine Person mit bestimmten Eigenschaften (Alter, Bildungsstand etc.) kauft oder nicht, steht nicht im Zentrum dieser Analyse. Die logistische Regression, die zur Modellierung verwendet wurde, hat allerdings den Vorteil, dass sie eine hohe Interpretierbarkeit bietet und zugleich brauchbare Prognoseleistungen liefert. Die Analyse leifert Antworten auf die Frage, welche Variablen für den Kauf verantwortlich sind und zugleich liefert sie Aussagen über die Kaufwahrscheinlichkeit potentieller Kunden.</p>
 </div>
 <div id="exploration" class="section level2">
 <h2>Exploration</h2>
-<p>Betrachtet man die Variablen Beziehungsstatus, Bildungsniveau, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit 49.62% deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in 30.42% der Fälle. Kunden ohne Autokredit kauften zu 42.08% während Kunden mit Autokredit nur zu 29.63% eine Autoversicherung abschlossen.</p>
+<p>Betrachtet man die Variablen Beziehungsstatus, Bildung, Haushaltsversicherung und Autokredit, so stellt man fest, dass zwischen den Ausprägungen dieser Variablen statistisch signifikante Unterschiede im Hinblick auf die Erfolgsquote bei dem Versuch bestehen, Autoversicherungen zu verkaufen. In Bezug auf den Beziehungsstatus ist die Verkaufswahrscheinlichkeit bei Geschiedenen und Singles deutlich höher als bei Verheirateten. Mit dem Bildungsstand steigt tendenziell die Bereitschaft, eine Autoversicherung abzuschließen. Interessant ist auch, wie stark es sich auswirkt, ob bereits eine Haushaltsversicherung besteht und ob der ensprechende Kunde einen Autokredit besitzt. Kunden ohne Haushaltsversicherung kauften die Autoversicherung mit 49.62% deutlich öfters als Kunden mit Haushaltsversicherung. Diese kauften nur in 30.42% der Fälle. Kunden ohne Autokredit kauften zu 42.08% während Kunden mit Autokredit nur zu 29.63% eine Autoversicherung abschlossen.</p>
 <p><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA1-1.png" width="48%" /><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA1-2.png" width="48%" /><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA1-3.png" width="48%" /><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA1-4.png" width="48%" /></p>
 <p>Bei der Variablen, die die Anzahl der Kontaktierungen pro Kunde misst, ist zu beachten, dass die Verteilung dieser Variablen extrem schief ist. 98% der Kunden wurden nicht öfter als 10 mal kontaktiert. Betrachtet man diese 98% der Kunden, zeichnet sich ein Trend ab, demzufolge der Verkaufserfolg mit der Anzahl der Kontakte abnimmt.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<p>Die Variable <em>PrevAttempts</em> gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen <em>NoOfContacts</em>. 99% der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.</p>
+<p>Die Variable <em>vorhergehendeKontakte</em> gibt an, wie viele Kontaktversuche pro Kunde vor der aktuellen Kampagne bereits stattgefunden haben. Die Überlegungen hinsichtlich der extremen Schiefe der Verteilung der Variablen gelten hier genauso wie bei der Variablen <em>AnzahlKontakte</em>. 99% der Kunden wurden vor der aktuellen Kampagne nicht öfter als 10 mal kontaktiert. Hier zeichnet sich ein positiver Trend ab. Je öfter ein Kunde vor der aktuellen Kampagne bereits kontaktiert wurde, desto eher war er im Durchschnitt bereit, die Versicherung während der Kampagne zu kaufen. Es scheint also so zu sein, dass häufiges Kontaktieren von Kunden mit zeitlicher Verzögerung, d.h. in späteren Kampagnen vorteilhaft sein kann, während es im Verlauf einer aktuellen Kampagne nachteilig ist, Kunden zu oft zu kontaktieren.</p>
 <p>Auch die Dauer des Gesprächs zeigt eine Korrleation mit Kaufentscheidung bezüglich der Autoversicherung. Gespräche, die zu einem Kaufabschluss führen, dauern deutlich länger als Gespräche, die nicht mit einem Kauf enden.</p>
 <p><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA2-1.png" width="33%" /><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA2-2.png" width="33%" /><img src="/blog/2020-06-26-so-verkauft-man-versicherungen.en_files/figure-html/Graphical%20EDA2-3.png" width="33%" /></p>
 </div>
@@ -517,7 +3377,7 @@ failure
 <p>– Je länger das Verkausgespräch dauert, desto höher die Wahrscheinlichkeit eines Vertragsabschlusses</p>
 </blockquote>
 <!-- end of list -->
-<p>Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene neigen eher dazu, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.</p>
+<p>Diese Hypothesen werden nun mithilfe der logistischen Regression anhand des Validierungsdatensatzes statistisch getestet. Das Ergebnis ist in Tabelle 2 zusammengefasst. Fast alle Hypothesen halten einer statistischen Überprüfung durch neue Daten statt. Die Analyse zeigt, dass die Kaufwahrscheinlichkeit bei Kunden mit primärem und sekundärem Bildungsniveau (unterhalb einer Universitätsbildung) geringer ist als bei Kunden mit tertiärem Bildungsniveau (Universitätsbildung). Es bestätigen sich auch die Hypothesen, dass Kunden mit Haushaltsversicherung bzw. Autokredit eine geringere Kaufwahrscheinlichkeit haben. Die Anzahl der Kontaktversuche im Zuge der aktuellen Kampagne hat einen leicht negativen Einfluss auf die Kaufwahrscheinlichkeit, während mit der Anzahl der Kontaktversuche vor der aktuellen Kampagne die Kaufwahrscheinlichkeit im Zuge der aktuellen Kampagne zunimmt. Anders sieht es bei der Hypothese aus, dass Singles und Geschiedene eher dazu neigen, eine Autoversicherung zu kaufen. Diese Hypothese bestätigt sich nicht. Auch die Dauer des Verkausgesprächs hat nur einen vernachlässigbar geringen Effekt auf die Kaufwahrscheinlichkeit.</p>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-2">Table 2: </span>Überprüfung der Hypothesen mithilfe der logistischer Regression
@@ -546,13 +3406,13 @@ Pr(&gt;|z|)
 (Intercept)
 </td>
 <td style="text-align:right;">
--1.75
+-3.87
 </td>
 <td style="text-align:right;">
-0.27
+0.39
 </td>
 <td style="text-align:right;">
--6.50
+-9.80
 </td>
 <td style="text-align:right;">
 0.00
@@ -560,7 +3420,7 @@ Pr(&gt;|z|)
 </tr>
 <tr>
 <td style="text-align:left;">
-Educationsecondary
+BildungSekundär
 </td>
 <td style="text-align:right;">
 0.36
@@ -577,7 +3437,7 @@ Educationsecondary
 </tr>
 <tr>
 <td style="text-align:left;">
-Educationtertiary
+BildungTertiär
 </td>
 <td style="text-align:right;">
 0.80
@@ -594,7 +3454,7 @@ Educationtertiary
 </tr>
 <tr>
 <td style="text-align:left;">
-Education(Missing)
+Bildung(Missing)
 </td>
 <td style="text-align:right;">
 0.39
@@ -611,16 +3471,16 @@ Education(Missing)
 </tr>
 <tr>
 <td style="text-align:left;">
-HHInsuranceYes
+HaushaltsversicherungNein
 </td>
 <td style="text-align:right;">
--1.24
+1.24
 </td>
 <td style="text-align:right;">
 0.17
 </td>
 <td style="text-align:right;">
--7.47
+7.47
 </td>
 <td style="text-align:right;">
 0.00
@@ -628,16 +3488,16 @@ HHInsuranceYes
 </tr>
 <tr>
 <td style="text-align:left;">
-CarLoanYes
+AutokreditNein
 </td>
 <td style="text-align:right;">
--0.87
+0.87
 </td>
 <td style="text-align:right;">
 0.27
 </td>
 <td style="text-align:right;">
--3.21
+3.21
 </td>
 <td style="text-align:right;">
 0.00
@@ -645,7 +3505,7 @@ CarLoanYes
 </tr>
 <tr>
 <td style="text-align:left;">
-NoOfContacts
+AnzahlKontakte
 </td>
 <td style="text-align:right;">
 -0.08
@@ -662,7 +3522,7 @@ NoOfContacts
 </tr>
 <tr>
 <td style="text-align:left;">
-PrevAttempts
+vorhergehendeKontakte
 </td>
 <td style="text-align:right;">
 0.24
@@ -679,7 +3539,7 @@ PrevAttempts
 </tr>
 <tr>
 <td style="text-align:left;">
-CallDuration
+Gesprächsdauer
 </td>
 <td style="text-align:right;">
 0.00
@@ -705,8 +3565,8 @@ Die Area under the Curve (AUC) ist ein Maß für die Prognoseleistung eines Mode
 <div id="ökonomische-bedeutung" class="section level2">
 <h2>Ökonomische Bedeutung</h2>
 <p>Um die ökonomische Bedeutung der Koeffizienten zu verstehen, muss man das Konzept von <em>Odds</em> verstehen. <em>Odds</em> beschreiben das Verhältnis der Wahrscheinlichkeit, dass ein bestimmtes Ereignis eintritt (in unserem Fall: der Abschluss der Versicherung) und der Wahrscheinlichkeit, dass ein bestimmtes Ereignis nicht eintritt (in unserem Fall: kein Abschluss der Versicherung).</p>
-<p><span class="math display">\[ Odds = \frac{P(Y = 1)}{P(Y = 0)} \]</span></p>
-<p>Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden mit Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 71 % (1 - 0.29)geringer als bei einem Kunden ohne Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule).</p>
+<p><span class="math display">\[ Odds = \frac{P(&quot;Erfolg&quot;)}{P(&quot;Misserfolg&quot;)} \]</span></p>
+<p>Um den Effekt einer Variablen auf die Odds zu erhalten, wurden die Koeffizientschätzer (Estimates) exponiert. Auf diese Weise erhalten wir Tabelle 3. Die Interpretation ergibt sich wie folgt. Ob der potenzielle Kunde eine Haushaltsversicherung besitzt, hat einen großen Effekt auf die Odds des Versicherungsabschlusses. Bei einem Kunden ohne Haushaltsversicherung liegen die Odds des Versicherungsabschlusses für eine Autoversicherung um 247% höher als bei einem Kunden mit Haushaltsversicherung. Ein Kunde mit Universitätsbildung hat mehr als doppelt so hohe Odds (2.22) für einen Vertragsabschluss als ein Kunde mit einer primären Bildung (Grundschule). Ein Kunde ohne Autokredit hat um den Faktor 2.4 höhere Odds als ein Kunde mit Autokredit.</p>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:unnamed-chunk-4">Table 3: </span>Einfluss der Variablen auf die Odds
@@ -726,12 +3586,12 @@ x
 (Intercept)
 </td>
 <td style="text-align:right;">
-0.17
+0.02
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Educationsecondary
+BildungSekundär
 </td>
 <td style="text-align:right;">
 1.43
@@ -739,7 +3599,7 @@ Educationsecondary
 </tr>
 <tr>
 <td style="text-align:left;">
-Educationtertiary
+BildungTertiär
 </td>
 <td style="text-align:right;">
 2.22
@@ -747,7 +3607,7 @@ Educationtertiary
 </tr>
 <tr>
 <td style="text-align:left;">
-Education(Missing)
+Bildung(Missing)
 </td>
 <td style="text-align:right;">
 1.48
@@ -755,23 +3615,23 @@ Education(Missing)
 </tr>
 <tr>
 <td style="text-align:left;">
-HHInsuranceYes
+HaushaltsversicherungNein
 </td>
 <td style="text-align:right;">
-0.29
+3.47
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CarLoanYes
+AutokreditNein
 </td>
 <td style="text-align:right;">
-0.42
+2.40
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-NoOfContacts
+AnzahlKontakte
 </td>
 <td style="text-align:right;">
 0.92
@@ -779,7 +3639,7 @@ NoOfContacts
 </tr>
 <tr>
 <td style="text-align:left;">
-PrevAttempts
+vorhergehendeKontakte
 </td>
 <td style="text-align:right;">
 1.27
@@ -787,7 +3647,7 @@ PrevAttempts
 </tr>
 <tr>
 <td style="text-align:left;">
-CallDuration
+Gesprächsdauer
 </td>
 <td style="text-align:right;">
 1.00
@@ -796,10 +3656,11 @@ CallDuration
 </tbody>
 </table>
 <p>Die ökonomische Bedeutung der Ergebnisse kann in zwei Teile unterteilt werden.</p>
-<p>Zunächst sind die Variablen der logistischen Regression danach zu unterscheiden, ob das Versicherungsunternehmen Einfluss auf deren Ausprägungen hat. Das Versicherungsunternehmen kann den Bildungsstand seiner Kunden nicht verändern. Genauso wenig kann beeinflusst werden, ob der potenzielle Kunde einen Autokredit hat oder nicht. Auf der anderen Seite kann das Unternehmen die Anzahl der Kontaktierungen vor und während der Kampagne beeinflussen. Ob eine Haushaltsversicherung vorliegt, stellt einen Spezialfall dar, auf den wir zum Schluss zu sprechen kommen.</p>
-<p>Die Variablen <em>Bildungsstand</em> und <em>Autokredit</em> sind ökonomische bedeutsam, obwohl sie nicht durch das Unternehmen verändert werden können. Allerdings kann das Wissen um die Bedeutung der Variablen für die Erfolgsquote bei Versicherungsabschlüssen dazu genutzt werden, um gezielt potenzielle Kunden anzusprechen, die einen hohen Bildungsstand und keinen Autokredit haben, um so die Erfolgschancen zu erhöhen. Dieses gezielte Vorgehen erhöht die Effizienz der Werbemaßnahmen, da die Verschwendung von Unternehmensressourcen bei dem Versuch, Kunden mit geringer Kaufwahrscheinlichkeit zu werben, deutlich reduziert werden kann. Die Verkäufer der Versicherung können sich so gezielt auf die profitabelsten Kunden konzentrieren.</p>
-<p>Die Variablen <em>Anzahl der Kontaktierungen vor der Kampagne</em> und <em>Anzahl der Kontaktierungen nach der Kampagne</em> sind besonders interessant, da das Versicherungsunternehmen deren Ausprägung direkt beeinflussen kann. Um den Kampagnenerfolg zu steigern, kann das Unternehmen gemäß unserer Analyse bereits vor der Kampagne Maßnahmen ergreifen. Hartnäckigkeit scheint sich auszuzahlen. Da die Anzahl der Verkaufsversuche in der Vergangenheit einen positiven Effekt auf die Erfolgsquote in späteren Kampagnen hat, sollten auch Kunden, die in der Vergangenheit mehrfach nicht zum Abschluss einer Autoversicherung bewogen werden konnten, dennoch erneut kontaktiert werden. Allerdings muss dabei beachtet werden, dass sich der gewünschte Erfolg erst mit zeitlicher Verzögerung einstellt. Kurzfristig wirken sich zu häufige Kontaktversuche negativ auf die Kaufbereitschaft der Kunden aus. Möglicherweise muss die Vergütung der Verkäufer diesem Umstand auch Rechnung tragen. Es ist zu überlegen, ob nicht nur der Verkäufer der den Abschluss erreicht, eine Provision erhält, sondern auch derjenige, der mit seinen wiederholten Versuchen in der Vergangenheit, die Wahrscheinlichkeit für den finalen Vertragsabschluss erhöht hat.</p>
-<p>Es ist kostspielig für Versicherungsunternehmen, Versicherungen zu verkaufen. Es müssen Verkaufsmaterialien produziert, Marketingmaßnahmen müssen geplant und umgesetzt und Personal für den Verkauf muss bezahlt werden. Aus diesem Grund ist es wichtig, dass gezielt diejenigen potenziellen Kunden angesprochen werden, die eine hohe Kaufwahrscheinlichkeit aufweisen. In unserem Testdatensatz war die Versicherung mit dem Versuch, Autoversicherungen zu verkaufen bei 39.40% der umworbenen Kunden erfolgreich. In 60.60% der Fälle war der Verkaufsversuch vergeblich und die Kosten für Personal, Material und Marketing vergeudet. Hätte die Versicherung ihre Kampagne stattdessen auf unserem Modell aufgebaut, wären viele der vergeblichen Werbeversuche vermieden worden. Unser Modell war in der Lage zu 81.02% Personen, die im Verlauf der Kampagne ohnehin nicht kaufen würden, korrekt zu erkennen. Die Kosten, die durch die Werbeversuche bei diesen Personen entstanden sind, hätten vermieden werden können. Das wahrlose Kontaktieren von Personen hätte im Fall des Testdatensatzes eine Erfolgsquote von 0.394 erzielt. Das gezielte Kontaktieren von den Kunden mit hoher Kaufwahrscheinlichkeit gemäß unserem Modell hätte hingegen dazu geführt, dass 72.55% der kontaktierten Kunden gekauft hätten. Auf der anderen Seite ist aber wichtig, nicht nur Werbeversuche bei Kunden mit geringer Kaufwahrscheinlichkeit zu vermeiden, sondern auch möglichst viele der kaufbereiten Kunden zu identifizieren und zu kontaktieren. Klassifiziert man alle Kunden als Käufer, die eine Kaufwahrscheinlichkeit gemäß unserer Modellprognose von mehr als 40% aufweisen, so ist unser Modell in der Lage, 77.16% der Kunden, die letzendlich kauften, im Voraus korrekt zu identifizieren. Somit kann durch eine Werbekampagne auf Basis unseres Modells der Anteil der Misserfolge von 60.60% auf 27.45% reduziert, die Zahl der notwendigen Kontaktierungen von 1000 auf 419 verringert und 77.16% der tatsächlich Kaufbereiten von unserer Kampagne erreicht werden.</p>
+<p>Zunächst sind die Variablen der logistischen Regression danach zu unterscheiden, ob das Versicherungsunternehmen Einfluss auf deren Ausprägungen hat. Das Versicherungsunternehmen kann den Bildungsstand seiner Kunden nicht verändern. Genauso wenig kann beeinflusst werden, ob der potenzielle Kunde einen Autokredit hat oder nicht. Auf der anderen Seite kann das Unternehmen die Anzahl der Kontaktierungen vor und während der Kampagne beeinflussen.</p>
+<!-- Ob eine Haushaltsversicherung vorliegt, stellt einen Spezialfall dar, auf den wir zum Schluss zu sprechen kommen. -->
+<p>Die Variablen <em>Bildung</em> und <em>Autokredit</em> sind ökonomische bedeutsam, obwohl sie nicht durch das Unternehmen verändert werden können. Allerdings kann das Wissen um die Bedeutung der Variablen für die Erfolgsquote bei Versicherungsabschlüssen dazu genutzt werden, um gezielt potenzielle Kunden anzusprechen, die einen hohen Bildungsstand und keinen Autokredit haben, um so die Erfolgschancen zu erhöhen. Dieses gezielte Vorgehen erhöht die Effizienz der Werbemaßnahmen, da die Verschwendung von Unternehmensressourcen bei dem Versuch, Kunden mit geringer Kaufwahrscheinlichkeit zu werben, deutlich reduziert werden kann. Die Verkäufer der Versicherung können sich so gezielt auf die profitabelsten Kunden konzentrieren.</p>
+<p>Die Variablen <em>vorhergehendeKontakte</em> und <em>AnzahlKontakte</em> sind besonders interessant, da das Versicherungsunternehmen deren Ausprägung direkt beeinflussen kann. Um den Kampagnenerfolg zu steigern, kann das Unternehmen gemäß unserer Analyse bereits vor der Kampagne Maßnahmen ergreifen. Hartnäckigkeit scheint sich auszuzahlen. Da die Anzahl der Verkaufsversuche in der Vergangenheit einen positiven Effekt auf die Erfolgsquote in späteren Kampagnen hat, sollten auch Kunden, die in der Vergangenheit mehrfach nicht zum Abschluss einer Autoversicherung bewogen werden konnten, dennoch erneut kontaktiert werden. Allerdings muss dabei beachtet werden, dass sich der gewünschte Erfolg erst mit zeitlicher Verzögerung einstellt. Kurzfristig wirken sich zu häufige Kontaktversuche negativ auf die Kaufbereitschaft der Kunden aus. Möglicherweise muss die Vergütung der Verkäufer diesem Umstand auch Rechnung tragen. Es ist zu überlegen, ob nicht nur der Verkäufer der den Abschluss erreicht, eine Provision erhält, sondern auch derjenige, der mit seinen wiederholten Versuchen in der Vergangenheit, die Wahrscheinlichkeit für den finalen Vertragsabschluss erhöht hat.</p>
+<p>Es ist kostspielig für Versicherungsunternehmen, Versicherungen zu verkaufen. Es müssen Verkaufsmaterialien produziert, Marketingmaßnahmen müssen geplant und umgesetzt und Personal für den Verkauf muss bezahlt werden. Aus diesem Grund ist es wichtig, dass gezielt diejenigen potenziellen Kunden angesprochen werden, die eine hohe Kaufwahrscheinlichkeit aufweisen. In unserem Testdatensatz war das Versicherungsunternehmen mit dem Versuch, Autoversicherungen zu verkaufen bei 39.40% der umworbenen Kunden erfolgreich. In 60.60% der Fälle war der Verkaufsversuch vergeblich und die Kosten für Personal, Material und Marketing vergeudet. Hätte die Versicherung ihre Kampagne stattdessen auf unserem Modell aufgebaut, wären viele der vergeblichen Werbeversuche vermieden worden. Unser Modell war in der Lage zu 81.02% Personen, die im Verlauf der Kampagne ohnehin nicht kaufen würden, korrekt zu erkennen. Die Kosten, die durch die Werbeversuche bei diesen Personen entstanden sind, hätten vermieden werden können. Das wahrlose Kontaktieren von Personen hätte im Fall des Testdatensatzes eine Erfolgsquote von 39.40% erzielt. Das gezielte Kontaktieren von den Kunden mit hoher Kaufwahrscheinlichkeit gemäß unserem Modell hätte hingegen dazu geführt, dass 72.55% der kontaktierten Kunden gekauft hätten. Auf der anderen Seite ist aber wichtig, nicht nur Werbeversuche bei Kunden mit geringer Kaufwahrscheinlichkeit zu vermeiden, sondern auch möglichst viele der kaufbereiten Kunden zu identifizieren und zu kontaktieren. Klassifiziert man alle Kunden als Käufer, die eine Kaufwahrscheinlichkeit gemäß unserer Modellprognose von mehr als 40% aufweisen, so ist unser Modell in der Lage, 77.16% der Kunden, die letzendlich kauften, im Voraus korrekt zu identifizieren. Somit kann durch eine Werbekampagne auf Basis unseres Modells der Anteil der Misserfolge von 60.60% auf 27.45% reduziert, die Zahl der notwendigen Kontaktierungen von 1000 auf 419 verringert und 77.16% der tatsächlich Kaufbereiten von unserer Kampagne erreicht werden.</p>
 </div>
 <div id="fazit" class="section level2">
 <h2>Fazit</h2>
