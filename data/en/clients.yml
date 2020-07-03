@@ -1,13 +1,13 @@
 enable    : true
-title     : We care about our work
+title     : Die richtige Mischung
 description: >
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae dolorem, saepe ab, optio obcaecati id asperiores. Ab ullam qui architecto at eos distinctio debitis, libero reprehenderit excepturi rem ut odit est nam magni ratione necessitatibus, quod eaque, eius minima tempora deleniti illum aliquam! Perferendis optio dolorum blanditiis sapiente aperiam quaerat.
+  Um Daten gewinnbringend für Ihr Unternehmen nutzen zu können, bedarf es eines umfassenden Konzepts. Ein erfolgreiches Datenanalyseprojekt erfordert eine Kombination an Dienstleistungen. Die technische Durchführung der Analyse ist nur ein Teilaspekt. Die Ergebnisse der Analyse müssen in zweierlei Hinsicht eingeordnet und bewertet werden. Mithilfe statistischer Methoden trennen wir signifikante von unsignifikanten Ergebnissen und ordnen die Ergebnisse in den konkreten Unternehmenskontext ein. Wir passen die Zielsetzung des gesamten Analyseprojektes an die umfassende Unternehmensstrategie an und stellen sicher, dass wir mit unserem Projekt zu deren Erfolg beitragen. Das erfordert ein tiefgreifendes betriebswirtschaftliches Verständnis und Urteilsvermögen. Wir liefern praxisnahe Analysen, welche die Implikationen für die Unternehmensstrategie im Blick haben und konkrete Handlungsempfehlungen in den Vordergrund stellen. Deshalb endet das Projekt nicht mit der statistischen und ökonomischen Einordnung der Ergebnissen. Wir geben Handlungsempfehlungen, wie sie die gewonnenen Erkenntnisse für sich nutzen können und unterstützen Sie bei der Umsetzung. Das betrifft insbesondere datenbasierte Marketingmaßnahmen zur zielgruppenspezifischen Kundenansprache.
 image     : images/about/about-1.jpg
 servicelist:
-  - name    : Creative Designers
-  - name    : Genius Developers
-  - name    : Growth Hackers
-  - name    : Marketing Masterminds
+  - name    : Ökonomisch fundiert
+  - name    : Datenkompetenz
+  - name    : Statistisches Know How
+  - name    : Marketing
 clientLogo:
   - image   : images/client-logo/logo1.png
   - image   : images/client-logo/logo-2.png
