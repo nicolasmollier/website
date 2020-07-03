@@ -123,7 +123,7 @@ footerSubscribeTitle = "Subscribe"
 [Languages.en.params.hero]
 enable  = true
 heading = "Datengetriebene Beratung"
-description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. At quo dolor est incidunt suscipit minima, alias numquam voluptatum rerum porro. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore at laboriosam unde repellat id expedita quae quisquam libero officia consequatur."
+description = "Wir sind ein datengetriebenes Beratungsunternehmen. Mithilfe statistischer Methoden und Machine Learning unterstützen wir sie dabei, Unternehmensentscheidungen datenbasiert zu treffen. Wir sind überzeugt: Daten sind der Schlüssel zur Effizienz."
 #button  = true
 #btnText = "Know More"
 #btnURL  = "https://themefisher.com/"
