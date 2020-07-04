@@ -8,5 +8,5 @@ features = ['bootstrap4','responsive','multilingual']
 min_version = "0.62.0"
 
 [author]
-  name = "Datalytics"
+  name = "Firm_name"
  homepage = "https://themefisher.com/"
