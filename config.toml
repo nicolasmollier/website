@@ -1,7 +1,7 @@
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 baseURL = "https://infallible-jang-09ce2a.netlify.app"
 languageCode = "en-us"
-title = "Datalytics"
+title = "Firm_name"
 theme = "navigator-hugo"
 summaryLength = 10
 math = true
