@@ -106,7 +106,7 @@ btnText = "Nous contacter"
 [Languages.en]
 weight = 2
 languageCode = "de"
-title = "Datalytics"
+title = "Firm_name"
 dateFormat = "02.01.2006"
 
 home = "Start"
