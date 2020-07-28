@@ -1,7 +1,7 @@
 name = "Navigator Hugo"
 license = "CC BY 3.0"
 licenselink = "https://creativecommons.org/licenses/by/3.0/"
-description = "Datalytics is a Data Analytics and Consulting Company"
+description = "Firm_name is a Data Analytics and Consulting Company"
 homepage = "https://gethugothemes.com/products/navigator/"
 tags = ['Data Analytics', 'Data Science', 'Consulting', 'Business', 'Beratung', 'Datenanalyse', 'Mittelstand', 'Gewerbetreibende', 'Beratungsprojekt', 'Dienstleistung', 'Unternehmensberatung', 'Understand your Data', 'Marketing', 'R', 'Machine Learning', 'Statistical Learning', 'Statistische Analysen', 'statistical analysis']
 features = ['bootstrap4','responsive','multilingual']
