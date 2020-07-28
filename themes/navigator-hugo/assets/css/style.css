@@ -1522,7 +1522,7 @@ a:focus, a:hover {
   Single Blog Page
 ==================================================================*/
 #blog-banner {
-  padding-bottom: 100px;
+  padding-bottom: 100 px;
   padding-top: 150px;
 }
 
@@ -1613,7 +1613,7 @@ a:focus, a:hover {
   border: 1px solid #dedede;
   max-width: 120px;
   padding: 5px;
-  width: 100%;
+  width: 100%;  
 }
 
 .comment-list ul {
